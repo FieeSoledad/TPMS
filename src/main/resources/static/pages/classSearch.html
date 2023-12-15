@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>班级查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="classes" lay-filter="tabAllUser"></table>
+
+<div id="classIdSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="classId" id="classId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的班级id" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="majorIdSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">班级</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="majorId" id="majorId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的专业" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--添加启动修改事件的按钮-->
+<button type="button" class="layui-btn layui-btn-radius" id="editBtn" text-align="center">修改列表</button>
+<!-- 添加增加教室的按钮-->
+<button id="openAddClassBox" class="layui-btn layui-btn-normal">新增班级</button>
+
+<script src="../js/axios.js"></script>
+
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#classIdSearch").hide();
+        $("#majorIdSearch").hide();
+        //$("#studentSearch").hide();
+        init();//列表首次加载
+    })
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#classes'
+                ,type:"get"
+                ,url:url + "classes/classesSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'classId', width:150, title: '班级'}
+                    ,{field:'majorId', width:120, title: '专业'}
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+
+    //查询
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.5;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["classid查询","majorid查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocclassid();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDocmajorid()
+                //return false 开启该代码可禁止点击该按钮关闭
+            },
+        });
+    }
+
+    function addDocclassid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过班级查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#classIdSearch"),
+            yes: function(index, layero){
+                var classId =$("#classId").val();
+                var data={classId:classId}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classes/queryClassByClassId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var classId = item.classId;
+                            var majorId = item.majorId;
+                            msg += "班级" +  classId + " 专业: " +majorId + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function addDocmajorid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过专业查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#majorIdSearch"),
+            yes: function(index, layero){
+                var majorId =$("#majorId").val();
+                var data={majorId:majorId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classes/queryClassByMajorId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var classId = item.classId;
+                            var majorId = item.majorId;
+                            msg += "班级" +  classId + " 专业: " +majorId + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function onConfirmEditClicked(){
+
+        const classId = document.getElementById("editClassId").value;
+        const majorId = document.getElementById("editMajorId").value;
+
+        const editData = {
+            classId: classId,
+            majorId: majorId
+        };
+
+        axios.put(url+"classes",editData).then(response=>{
+            console.log(response.data)
+        })
+            .catch(error=>
+            {
+                console.log("error!");
+            });
+    }
+
+
+    document.getElementById('editBtn').addEventListener('click', function () {
+        // 使用你的方式显示对话框 (比如使用 Layui 等)
+        // ...
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            const dialogIndex = layer.open({
+                type: 1,
+                title: '修改界面',
+                area: ['600px', '300px'],
+                content: '<div id="editContent">`\n' +
+                    '    <div>\n' +
+                    '        <label class="layui-form-label">班级</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入班级" class="layui-input" id="editClassId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">专业</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入专业" class="layui-input" id="editMajorId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <button id="confirmEdit" type="button" class="layui-btn layui-btn-radius">确认修改</button>\n' +
+                    '    </div>\n' +
+                    '</div>',
+                success: function () {
+                    // 在弹窗成功打开时，添加确认修改按钮的点击事件监听
+                    document.getElementById('confirmEdit').addEventListener('click',onConfirmEditClicked);
+
+                },
+                end: function () {
+                    // 在对话框关闭时，移除确认修改按钮的点击事件监听，避免内存泄漏
+                    init()
+                    document.getElementById('confirmEdit').removeEventListener('click', onConfirmEditClicked);
+                }
+            });
+        });
+    });
+    layui.use('layer', function() {
+        var layer = layui.layer;
+
+        // 监听按钮点击事件
+        document.getElementById('openAddClassBox').addEventListener('click', function() {
+            // 构建输入框的HTML字符串
+            var inputHtml = `
+          <div class="layui-form-item">
+            <label class="layui-form-label">班级ID</label>
+            <div class="layui-input-block">
+              <input type="text" name="classId" placeholder="请输入班级ID" class="layui-input">
+            </div>
+          </div><div class="layui-form-item">
+            <label class="layui-form-label">专业ID</label>
+            <div class="layui-input-block">
+              <input type="text" name="majorId" placeholder="请输入专业ID" class="layui-input">
+            </div>
+          </div>
+
+
+        `;
+
+            // 弹出输入框
+            layer.open({
+                title: '请输入信息',
+                content: inputHtml,
+                area: ['400px', '300px'], // 设置弹出框的宽高
+                btn: ['确认', '取消'],
+                yes: function (index, layero) {
+                    // 获取用户输入的值
+                    var classId= layero.find('input[name="classId"]').val();
+                    var majorId = layero.find('input[name="majorId"]').val();
+
+
+                    //TODO: 这里可以将用户输入的数据传递给后端进行处理，例如使用Ajax或其他方式发送给后端
+                    var classes = {
+                        classId:classId,
+                        majorId:majorId
+
+                    };
+                    console.log(classes)
+                    $.ajax({
+                        url: '/classes/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(classes),
+                        success: function (data) {
+                            // 成功处理后的操作，例如提示保存成功
+                            console.log(data);
+                            if(data.code == 200){
+                                init();
+                            }
+                        },
+                    });
+                    // 关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.ExamDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Exam">
+        <!--@Table exam-->
+        <result property="examId" column="exam_id" jdbcType="VARCHAR"/>
+        <result property="courseId" column="course_id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="examType" column="exam_type" jdbcType="VARCHAR"/>
+        <result property="examState" column="exam_state" jdbcType="VARCHAR"/>
+        <result property="examTime" column="exam_time" jdbcType="VARCHAR"/>
+        <result property="classroomId" column="classroom_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where exam_id = #{examId}
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryExamByExamId" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where exam_id = #{examId}
+    </select>
+    <select id="queryExamByCourseId" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where course_id = #{courseId}
+    </select>
+    <select id="queryExamByUserId" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where user_id = #{userId}
+    </select>
+    <select id="queryExamByExamType" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where exam_type = #{examType}
+    </select>
+    <select id="queryExamByExamTime" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where exam_time = #{examTime}
+    </select>
+    <select id="queryExamByClassroomId" resultMap="BaseResultMap">
+        select
+            exam_id, course_id, user_id, exam_type, exam_state, exam_time, classroom_id
+        from exam
+        where classroom_id = #{classroomId}
+    </select>
+
+<!-- 查询数据库的全部内容-->
+    <select id="examSelectAll" resultMap="BaseResultMap">
+        select exam_id, course_id, user_id, classroom_id, exam_type, exam_state, exam_time
+        from exam limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="examSelectAllExa" resultMap="BaseResultMap">
+        select * from exam
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from exam
+        <where>
+            <if test="examId != null and examId != ''">
+                and exam_id = #{examId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="examType != null and examType != ''">
+                and exam_type = #{examType}
+            </if>
+            <if test="examState != null and examState != ''">
+                and exam_state = #{examState}
+            </if>
+            <if test="examTime != null">
+                and exam_time = #{examTime}
+            </if>
+            <if test="classroomId != null and classroomId != ''">
+                and classroom_id = #{classroomId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="examId" useGeneratedKeys="true">
+        insert into exam(exam_id,course_id, user_id, exam_type, exam_state, exam_time, exam_room)
+        values (#{examId},#{courseId}, #{userId}, #{examType}, #{examState}, #{examTime}, #{examRoom})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="examId" useGeneratedKeys="true">
+        insert into exam(course_id, user_id, exam_type, exam_state, exam_time, classroom_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.courseId}, #{entity.userId}, #{entity.examType}, #{entity.examState}, #{entity.examTime}, #{entity.classroomId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="examId" useGeneratedKeys="true">
+        insert into exam(course_id, user_id, exam_type, exam_state, exam_time, classroom_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.courseId}, #{entity.userId}, #{entity.examType}, #{entity.examState}, #{entity.examTime}, #{entity.classroomId})
+        </foreach>
+        on duplicate key update
+        course_id = values(course_id),
+        user_id = values(user_id),
+        exam_type = values(exam_type),
+        exam_state = values(exam_state),
+        exam_time = values(exam_time),
+        classroom_id = values(classroom_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update exam
+        <set>
+            <if test="courseId != null and courseId != ''">
+                course_id = #{courseId},
+            </if>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId},
+            </if>
+            <if test="examType != null and examType != ''">
+                exam_type = #{examType},
+            </if>
+            <if test="examState != null and examState != ''">
+                exam_state = #{examState},
+            </if>
+            <if test="examTime != null">
+                exam_time = #{examTime},
+            </if>
+            <if test="classroomId != null and classroomId != ''">
+                classroom_id = #{classroomId},
+            </if>
+        </set>
+        where exam_id = #{examId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from exam where exam_id = #{examId}
+    </delete>
+
+</mapper>
+

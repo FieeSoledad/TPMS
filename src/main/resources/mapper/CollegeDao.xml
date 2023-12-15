@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.CollegeDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.College">
+        <!--@Table college-->
+        <result property="collegeId" column="college_id" jdbcType="VARCHAR"/>
+        <result property="collegePlace" column="college_place" jdbcType="VARCHAR"/>
+        <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          college_id, college_place, college_name
+        from college
+        where college_id = #{collegeId}
+    </select>
+<!--查询全部数据库中的内容-->
+    <select id="collegeSelectAll" resultMap="BaseResultMap">
+        select * from college limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="collegeSelectAllCol" resultMap="BaseResultMap">
+        select * from college
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryCollegeByCollegePlace" resultMap="BaseResultMap">
+        select
+            college_id, college_place, college_name
+        from college
+        where college_place = #{collegePlace}
+    </select>
+
+    <select id="queryCollegeByCollegeName" resultMap="BaseResultMap">
+        select
+            college_id, college_place, college_name
+        from college
+        where college_name = #{collegeName}
+    </select>
+
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from college
+        <where>
+            <if test="collegeId != null and collegeId != ''">
+                and college_id = #{collegeId}
+            </if>
+            <if test="collegePlace != null and collegePlace != ''">
+                and college_place = #{collegePlace}
+            </if>
+            <if test="collegeName != null and collegeName != ''">
+                and college_name = #{collegeName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="collegeId" useGeneratedKeys="true">
+        insert into college(college_Id,college_place, college_name)
+        values (#{collegeId},#{collegePlace}, #{collegeName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="collegeId" useGeneratedKeys="true">
+        insert into college(college_place, college_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.collegePlace}, #{entity.collegeName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="collegeId" useGeneratedKeys="true">
+        insert into college(college_place, college_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.collegePlace}, #{entity.collegeName})
+        </foreach>
+        on duplicate key update
+        college_place = values(college_place),
+        college_name = values(college_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update college
+        <set>
+            <if test="collegePlace != null and collegePlace != ''">
+                college_place = #{collegePlace},
+            </if>
+            <if test="collegeName != null and collegeName != ''">
+                college_name = #{collegeName},
+            </if>
+        </set>
+        where college_id = #{collegeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from college where college_id = #{collegeId}
+    </delete>
+
+</mapper>
+

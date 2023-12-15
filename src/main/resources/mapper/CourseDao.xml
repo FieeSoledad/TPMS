@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.CourseDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Course">
+        <!--@Table course-->
+        <result property="courseId" column="course_id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+        <result property="courseNumweek" column="course_numweek" jdbcType="INTEGER"/>
+        <result property="credit" column="credit" jdbcType="INTEGER"/>
+        <result property="term" column="term" jdbcType="VARCHAR"/>
+        <result property="courseType" column="course_type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          course_id, user_id, course_name, course_numweek, credit, term, course_type
+        from course
+        where course_id = #{courseId}
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from course
+        <where>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="courseName != null and courseName != ''">
+                and course_name = #{courseName}
+            </if>
+            <if test="courseNumweek != null">
+                and course_numweek = #{courseNumweek}
+            </if>
+            <if test="credit != null">
+                and credit = #{credit}
+            </if>
+            <if test="term != null and term != ''">
+                and term = #{term}
+            </if>
+            <if test="courseType != null and courseType != ''">
+                and course_type = #{courseType}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course(course_id,user_id, course_name, course_numweek, credit, term, course_type)
+        values (#{courseId},#{userId}, #{courseName}, #{courseNumweek}, #{credit}, #{term}, #{courseType})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course(user_id, course_name, course_numweek, credit, term, course_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userId}, #{entity.courseName}, #{entity.courseNumweek}, #{entity.credit}, #{entity.term}, #{entity.courseType})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course(user_id, course_name, course_numweek, credit, term, course_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.courseName}, #{entity.courseNumweek}, #{entity.credit}, #{entity.term}, #{entity.courseType})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        course_name = values(course_name),
+        course_numweek = values(course_numweek),
+        credit = values(credit),
+        term = values(term),
+        course_type = values(course_type)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update course
+        <set>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId},
+            </if>
+            <if test="courseName != null and courseName != ''">
+                course_name = #{courseName},
+            </if>
+            <if test="courseNumweek != null">
+                course_numweek = #{courseNumweek},
+            </if>
+            <if test="credit != null">
+                credit = #{credit},
+            </if>
+            <if test="term != null and term != ''">
+                term = #{term},
+            </if>
+            <if test="courseType != null and courseType != ''">
+                course_type = #{courseType},
+            </if>
+        </set>
+        where course_id = #{courseId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from course where course_id = #{courseId}
+    </delete>
+     <!--查询数据库全部的信息-->
+    <select id="courseSelectAll" resultMap="BaseResultMap">
+        select * from course limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="courseSelectAllCou" resultMap="BaseResultMap">
+        select * from course
+    </select>
+
+
+</mapper>
+

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>教室查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="classroom" lay-filter="tabAllUser"></table>
+
+<div id="classroomIdSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="classroomId" id="classroomId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教室号" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="classroomSizeSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="classroomSize" id="classroomSize" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教室大小" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="classroomPlaceSearch">
+    <form id="addAdnUpDateForm3" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="classroomPlace" id="classroomPlace" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教室位置" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="classroomTypeSearch">
+    <form id="addAdnUpDateForm4" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="classroomType" id="classroomType" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教室类型" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<!--添加启动修改事件的按钮-->
+<button type="button" class="layui-btn layui-btn-radius" id="editBtn" text-align="center">修改列表</button>
+<!--新增按钮-->
+<button id="openAddClassroomBox" class="layui-btn layui-btn-normal">新增教室</button>
+<script src="../js/axios.js"></script>
+
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#classroomIdSearch").hide();
+        $("#classroomSizeSearch").hide();
+        $("#classroomPlaceSearch").hide();
+        $("#classroomTypeSearch").hide();
+        init();//列表首次加载
+    })
+
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#classroom'
+                ,type:"get"
+                ,url:url + "classroom/classroomSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'classroomId', width:150, title: '教室号'}
+                    ,{field:'classroomSize', width:120, title: '教室大小'}
+                    ,{field:'classroomPlace', width:250, title: '教室位置'}
+                    ,{field:'classroomType', width:150, title: '教室类型'}
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.5;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["classroomid查询","classroomsize查询","classroomplace查询","classroomtype查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocclassroomid();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDocclassroomsize()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn3: function(){
+                //按钮【按钮三】的回调
+                addDocclassroomplace();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn4: function(){
+                //按钮【按钮四】的回调
+                addDocclassroomtype();
+                //return false 开启该代码可禁止点击该按钮关闭
+            },
+        });
+    }
+
+
+    function addDocclassroomid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教室号查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#classroomIdSearch"),
+            yes: function(index, layero){
+                var classroomId = $("#classroomId").val();
+                var data={classroomId:classroomId,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classroom/queryClassroomByClassroomId",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var classroomId = data.classroomId;
+                            var classroomSize = data.classroomSize;
+                            var classroomPlace = data.classroomPlace;
+                            var classroomType = data.classroomType;
+                            layer.alert("查询结果： 教室号" + classroomId+"  班级大小："+ classroomSize+ "  班级位置：" + classroomPlace + "  班级类型:" +classroomType, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关学生");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+
+    function addDocclassroomsize(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教室大小查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#classroomSizeSearch"),
+            yes: function(index, layero){
+                var classroomSize =$("#classroomSize").val();
+                var data={classroomSize:classroomSize,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classroom/queryClassroomByClassroomSize",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var classroomId = item.classroomId;
+                            var classroomSize = item.classroomSize;
+                            var classroomPlace = item.classroomPlace;
+                            var classroomType = item.classroomType;
+                            msg += "教室号:" + classroomId+"  班级大小:"+ classroomSize+ "  班级位置：" + classroomPlace + "  班级类型:" +classroomType+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function addDocclassroomplace(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教室位置查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#classroomPlaceSearch"),
+            yes: function(index, layero){
+                var classroomPlace =$("#classroomPlace").val();
+                var data={classroomPlace:classroomPlace,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classroom/queryClassroomByClassroomPlace",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var classroomId = item.classroomId;
+                            var classroomSize = item.classroomSize;
+                            var classroomPlace = item.classroomPlace;
+                            var classroomType = item.classroomType;
+                            msg += "教室号:" + classroomId+"  班级大小:"+ classroomSize+ "  班级位置：" + classroomPlace + "  班级类型:" +classroomType+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDocclassroomtype(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教室类型查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#classroomTypeSearch"),
+            yes: function(index, layero){
+                var classroomType =$("#classroomType").val();
+                var data={classroomType:classroomType,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"classroom/queryClassroomByClassroomType",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var classroomId = item.classroomId;
+                            var classroomSize = item.classroomSize;
+                            var classroomPlace = item.classroomPlace;
+                            var classroomType = item.classroomType;
+                            msg += "教室号:" + classroomId+"  班级大小:"+ classroomSize+ "  班级位置：" + classroomPlace + "  班级类型:" +classroomType+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function onConfirmEditClicked(){
+
+        const classroomId = document.getElementById("editClassroomId").value;
+        const classroomSize = document.getElementById("editClassroomSize").value;
+        const classroomPlace = document.getElementById("editClassroomPlace").value;
+        const classroomType = document.getElementById("editClassroomType").value;
+
+        const editData = {
+            classroomId: classroomId,
+            classroomSize: classroomSize,
+            classroomPlace: classroomPlace,
+            classroomType: classroomType
+        };
+
+        axios.put(url+"classroom",editData).then(response=>{
+            console.log(response.data)
+        })
+            .catch(error=>
+            {
+                console.log("error!");
+            });
+    }
+
+
+    document.getElementById('editBtn').addEventListener('click', function () {
+        // 使用你的方式显示对话框 (比如使用 Layui 等)
+        // ...
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            const dialogIndex = layer.open({
+                type: 1,
+                title: '修改界面',
+                area: ['600px', '300px'],
+                content: '<div id="editContent">`\n' +
+                    '    <div>\n' +
+                    '        <label class="layui-form-label">教室号</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教室号" class="layui-input" id="editClassroomId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室大小</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教室大小" class="layui-input" id="editClassroomSize">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室位置</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教室位置" class="layui-input" id="editClassroomPlace">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室类型</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教室类型" class="layui-input" id="editClassroomType">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <button id="confirmEdit" type="button" class="layui-btn layui-btn-radius">确认修改</button>\n' +
+                    '    </div>\n' +
+                    '</div>',
+                success: function () {
+                    // 在弹窗成功打开时，添加确认修改按钮的点击事件监听
+                    document.getElementById('confirmEdit').addEventListener('click',onConfirmEditClicked);
+                },
+                end: function () {
+                    // 在对话框关闭时，移除确认修改按钮的点击事件监听，避免内存泄漏
+                    init()
+                    document.getElementById('confirmEdit').removeEventListener('click', onConfirmEditClicked);
+                }
+            });
+        });
+    });
+    //增加功能的实现
+    layui.use('layer', function() {
+        var layer = layui.layer;
+
+        // 监听按钮点击事件
+        document.getElementById('openAddClassroomBox').addEventListener('click', function() {
+            // 构建输入框的HTML字符串
+            var inputHtml = `
+          <div class="layui-form-item">
+            <label class="layui-form-label">教室编号</label>
+            <div class="layui-input-block">
+              <input type="text" name="classroomId" placeholder="请输入教室编号" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">教室大小</label>
+            <div class="layui-input-block">
+              <input type="text" name="classroomSize" placeholder="请输入教室大小" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">教室位置</label>
+            <div class="layui-input-block">
+              <input type="text" name="classroomPlace" placeholder="请输入教室位置" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">教室类型</label>
+            <div class="layui-input-block">
+              <input type="text" name="classroomType" placeholder="请输入教室类型" class="layui-input">
+            </div>
+          </div>
+
+        `;
+
+            // 弹出输入框
+            layer.open({
+                title: '请输入信息',
+                content: inputHtml,
+                area: ['400px', '300px'], // 设置弹出框的宽高
+                btn: ['确认', '取消'],
+                yes: function (index, layero) {
+                    // 获取用户输入的值
+                    var classroomId= layero.find('input[name="classroomId"]').val();
+                    var classroomSize = layero.find('input[name="classroomSize"]').val();
+                    var classroomPlace = layero.find('input[name="classroomPlace"]').val();
+                    var classroomType = layero.find('input[name="classroomType"]').val();
+
+
+
+                    // TODO: 这里可以将用户输入的数据传递给后端进行处理，例如使用Ajax或其他方式发送给后端
+                    var classroom = {
+                        classroomId: classroomId,
+                        classroomSize: classroomSize,
+                        classroomPlace: classroomPlace,
+                        classroomType: classroomType,
+
+                    };
+                    console.log(classroom)
+                    $.ajax({
+                        url: '/classroom/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(classroom),
+                        success: function (data) {
+                            // 成功处理后的操作，例如提示保存成功
+                            console.log(data);
+                            if(data.code == 200){
+                                init();
+                            }
+                        },
+                    });
+                    // 关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

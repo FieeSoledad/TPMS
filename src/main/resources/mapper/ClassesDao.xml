@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.ClassesDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Classes">
+        <!--@Table classes-->
+        <result property="classId" column="class_id" jdbcType="VARCHAR"/>
+        <result property="majorId" column="major_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          class_id, major_id
+        from classes
+        where class_id = #{classId}
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryClassByClassId" resultMap="BaseResultMap">
+        select
+            class_id, major_id
+        from classes
+        where class_id = #{classId}
+    </select>
+
+    <select id="queryClassByMajorId" resultMap="BaseResultMap">
+        select
+            class_id, major_id
+        from classes
+        where major_id = #{majorId}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from classes
+        <where>
+            <if test="classId != null and classId != ''">
+                and class_id = #{classId}
+            </if>
+            <if test="majorId != null and majorId != ''">
+                and major_id = #{majorId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增按钮的实现-->
+    <insert id="insert"  parameterType="com.huadi.project.tpms.entity.Classes">
+        insert into classes(class_id,major_id)
+        values (#{classId},#{majorId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="classId" useGeneratedKeys="true">
+        insert into classes(major_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.majorId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="classId" useGeneratedKeys="true">
+        insert into classes(major_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.majorId})
+        </foreach>
+        on duplicate key update
+        major_id = values(major_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update classes
+        <set>
+            <if test="majorId != null and majorId != ''">
+                major_id = #{majorId},
+            </if>
+        </set>
+        where class_id = #{classId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from classes where class_id = #{classId}
+    </delete>
+
+
+<!-- 查询全部数据的方法-->
+    <select id="classesSelectAll" resultMap="BaseResultMap">
+        select * from classes limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="classesSelectAllCla" resultMap="BaseResultMap">
+        select * from ............................classes
+    </select>
+</mapper>
+

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <style type="text/css">
+        .container{
+            width: 420px;
+            height: 320px;
+            min-height: 320px;
+            max-height: 320px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            padding: 20px;
+            z-index: 130;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 3px 18px rgba(100, 0, 0, .5);
+            font-size: 16px;
+        }
+        .close{
+            background-color: white;
+            border: none;
+            font-size: 18px;
+            margin-left: 410px;
+            margin-top: -10px;
+        }
+
+        .layui-input{
+            border-radius: 5px;
+            width: 300px;
+            height: 40px;
+            font-size: 15px;
+        }
+        .layui-form-item{
+            margin-left: -20px;
+        }
+        #logoid{
+            margin-top: -16px;
+            padding-left:150px;
+            padding-bottom: 15px;
+        }
+        .layui-btn{
+            margin-left: -50px;
+            border-radius: 5px;
+            width: 350px;
+            height: 40px;
+            font-size: 15px;
+        }
+        .verity{
+            width: 120px;
+        }
+        .font-set{
+            font-size: 13px;
+            text-decoration: none;
+            margin-left: 120px;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<form class="layui-form" action="/verify/login" method="post">
+    <div class="container">
+
+        <button class="close" title="关闭">X</button>
+
+        <div class="layui-form-mid layui-word-aux">
+            <img id="logoid" src="/image/login.png" height="35">
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户id &nbsp&nbsp</label>
+            <div class="layui-input-block">
+                <input type="text" id="username" name="username" required  lay-verify="required" placeholder="请输入用户id" autocomplete="off" class="layui-input">
+                <p id="userlengthPrompt" style="color:#6C6C6C;display:none;" font-size="4px">账号长度超过8!</p>
+                <p id="userExsitPrompt" style="color: #6C6C6C;display: none" font-size="4px">该账号未注册!</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码</label>
+            <div class="layui-input-inline">
+                <input type="password" id="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                <p id="pwdLengthPrompt" style="color:#6C6C6C;display:none" font-size="4px">密码长度超过20!</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
+            </div>
+        </div>
+        <a href="/pages/register.html" class="font-set">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp立即注册</a>
+    </div>
+</form>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script type="text/javascript" src="../js/axios.js"></script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // 添加点击事件监听器到登录按钮
+        document.querySelector('.layui-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // 阻止默认表单提交行为
+
+            // 获取表单数据
+            const formElement = document.querySelector('.layui-form');
+            const formData = new FormData(formElement);
+
+            // 发送登录请求到服务器
+            fetch('/verify/login', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 登录成功，重定向到index.html  在客户端创建了session
+                        window.location.href = 'pages/index.html';
+                    } else {
+                        // 登录失败，显示错误提示
+                        alert('无效的用户名或密码。请重试。');
+                    }
+                })
+                .catch(error => {
+                    console.error('发生错误：', error);
+                    alert('发生意外错误。请稍后重试。');
+                });
+        });
+    });
+
+    //第二种功能的实现
+    const inputUserElement = document.getElementById("username");
+    const inputPasswordElement = document.getElementById("password");
+    const userExsitPrompt = document.getElementById("userExsitPrompt");
+    const userLengthPrompt = document.getElementById("userlengthPrompt");
+    const pwdLengthPrompt = document.getElementById("pwdLengthPrompt");
+
+    inputUserElement.addEventListener('blur', (event) => {
+        // 在输入框失去焦点时，执行相应的动作
+        const inputValue = event.target.value;
+        const inputLength = inputValue.length;
+
+        if(inputLength>8)
+        {
+            userLengthPrompt.style.display = "block";
+            userExsitPrompt.style.display = "none";
+        }
+        else if(inputLength!=0)
+        {
+            userLengthPrompt.style.display = "none";
+
+            axios({  //封装了Ajax请求方法 能自动将json数据转换为JS对象
+                method:"get",
+                url:"http://localhost:8080/register/user_id/"+inputValue
+            }).then((response)=>{   //快速定义函数的方式
+                if(response.data=="0")
+                {
+                    userExsitPrompt.style.display = "block";
+                }
+                else
+                {
+                    userExsitPrompt.style.display = "none";
+                }
+            })
+        }
+    });
+
+    inputPasswordElement.addEventListener('blur', (event) => {
+        // 在输入框失去焦点时，执行相应的动作
+        const inputValue = event.target.value;
+        const inputLength = inputValue.length;
+
+        if(inputLength>20)
+        {
+            pwdLengthPrompt.style.display = "block";
+        }
+        else
+        {
+            pwdLengthPrompt.style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>
+

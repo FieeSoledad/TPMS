@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>教材查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="textbook" lay-filter="tabAllUser"></table>
+<div id="ISBNSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="isbn" id="isbn" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的ISBN" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="CourseIdSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="courseId" id="courseId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的课程ID" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookNameSearch">
+    <form id="addAdnUpDateForm3" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookName" id="textbookName" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材名字" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookQuantitySearch">
+    <form id="addAdnUpDateForm4" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookQuantity" id="textbookQuantity" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材数量" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookPublisherSearch">
+    <form id="addAdnUpDateForm5" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookPublisher" id="textbookPublisher" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材出版社" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookLocationSearch">
+    <form id="addAdnUpDateForm6" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookLocation" id="textbookLocation" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材存放位置" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--添加启动修改事件的按钮-->
+<button type="button" class="layui-btn layui-btn-radius" id="editBtn" text-align="center">修改列表</button>
+<!--新增按钮-->
+<button id="openAddTextbookBox" class="layui-btn layui-btn-normal">新增教材发放</button>
+<script src="../js/axios.js"></script>
+
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript" prefix="fmt">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#ISBNSearch").hide();
+        $("#CourseIdSearch").hide();
+        $("#TextbookNameSearch").hide();
+        $("#TextbookQuantitySearch").hide();
+        $("#TextbookPublisherSearch").hide();
+        $("#TextbookLocationSearch").hide();
+        init();//列表首次加载
+    })
+
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#textbook'
+                ,type:"get"
+                ,url:url + "textbook/textbookSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    // console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'isbn', width:120, title: '图书ISBN'}
+                    ,{field:'courseId', width:150, title: '课程ID'}
+                    ,{field:'textbookName', width:120, title: '教材名字'}
+                    ,{field:'textbookQuantity', width:120, title: '教材数量'}
+                    ,{field:'textbookPublisher', width:120, title: '教材出版社'}
+                    ,{field:'textbookLocation', width:120, title: '教材存放位置'}
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+    //查询按钮的实现
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["isbn查询","courseid查询","textbookname查询","textbookquantity查询","textbookpublisher查询","textbooklocation查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocisbn();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoccourseid()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn3: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookname();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn4: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookquantity();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn5: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookpublisher();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn6: function(){
+                //按钮【按钮三】的回调
+                addDoctextbooklocation();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,
+        });
+    }
+    function addDocisbn(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过图书ISBN查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#ISBNSearch"),
+            yes: function(index, layero){
+                var isbn = $("#isbn").val();
+                var data={isbn:isbn,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByISBN",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var isbn = data.isbn;
+                            var courseId = data.courseId;
+                            var textbookName = data.textbookName;
+                            var textbookQuantity = data.textbookQuantity;
+                            var textbookPublisher = data.textbookPublisher;
+                            var textbookLocation = data.textbookLocation;
+                            layer.alert("查询结果： ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoccourseid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#CourseIdSearch"),
+            yes: function(index, layero){
+                var courseId =$("#courseId").val();
+                var data={courseId:courseId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByCourseId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = item.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookname(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过书名查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookNameSearch"),
+            yes: function(index, layero){
+                var textbookName =$("#textbookName").val();
+                var data={textbookName:textbookName,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookName",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var isbn = data.isbn;
+                            var courseId = data.courseId;
+                            var textbookName = data.textbookName;
+                            var textbookQuantity = data.textbookQuantity;
+                            var textbookPublisher = data.textbookPublisher;
+                            var textbookLocation = data.textbookLocation;
+                            layer.alert("查询结果： ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookquantity(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材数量查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookQuantitySearch"),
+            yes: function(index, layero){
+                var textbookQuantity = $("#textbookQuantity").val();
+                var data={textbookQuantity:textbookQuantity,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookQuantity",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoctextbookpublisher(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材出版社',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#textbookPublisher"),
+            yes: function(index, layero){
+                var textbookPublisher = $("#textbookPublisher").val();
+                var data={textbookPublisher:textbookPublisher,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookPublisher",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoctextbooklocation(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材存放位置',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookLocationSearch"),
+            yes: function(index, layero){
+                var textbookLocation = $("#textbookLocation").val();
+                var data={textbookLocation:textbookLocation,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookLocation",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    //查询按钮的实现
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["isbn查询","courseid查询","textbookname查询","textbookquantity查询","textbookpublisher查询","textbooklocation查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocisbn();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoccourseid()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn3: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookname();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn4: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookquantity();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn5: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookpublisher();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn6: function(){
+                //按钮【按钮三】的回调
+                addDoctextbooklocation();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,
+        });
+    }
+    function addDocisbn(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过图书ISBN查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#ISBNSearch"),
+            yes: function(index, layero){
+                var isbn = $("#isbn").val();
+                var data={isbn:isbn,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByISBN",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var isbn = data.isbn;
+                            var courseId = data.courseId;
+                            var textbookName = data.textbookName;
+                            var textbookQuantity = data.textbookQuantity;
+                            var textbookPublisher = data.textbookPublisher;
+                            var textbookLocation = data.textbookLocation;
+                            layer.alert("查询结果： ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoccourseid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#CourseIdSearch"),
+            yes: function(index, layero){
+                var courseId =$("#courseId").val();
+                var data={courseId:courseId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByCourseId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = item.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookname(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过书名查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookNameSearch"),
+            yes: function(index, layero){
+                var textbookName =$("#textbookName").val();
+                var data={textbookName:textbookName,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookName",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var isbn = data.isbn;
+                            var courseId = data.courseId;
+                            var textbookName = data.textbookName;
+                            var textbookQuantity = data.textbookQuantity;
+                            var textbookPublisher = data.textbookPublisher;
+                            var textbookLocation = data.textbookLocation;
+                            layer.alert("查询结果： ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookquantity(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材数量查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookQuantitySearch"),
+            yes: function(index, layero){
+                var textbookQuantity = $("#textbookQuantity").val();
+                var data={textbookQuantity:textbookQuantity,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookQuantity",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoctextbookpublisher(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材出版社',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#textbookPublisher"),
+            yes: function(index, layero){
+                var textbookPublisher = $("#textbookPublisher").val();
+                var data={textbookPublisher:textbookPublisher,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookPublisher",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoctextbooklocation(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材存放位置',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookLocationSearch"),
+            yes: function(index, layero){
+                var textbookLocation = $("#textbookLocation").val();
+                var data={textbookLocation:textbookLocation,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbook/queryTextbookByTextbookLocation",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var isbn = data.isbn;
+                            var courseId = item.courseId;
+                            var textbookName = item.textbookName;
+                            var textbookQuantity = item.textbookQuantity;
+                            var textbookPublisher = item.textbookPublisher;
+                            var textbookLocation = item.textbookLocation;
+                            msg += "ISBN" + isbn+"  课程ID："+ courseId+ "  教材名字：" + textbookName+"  教材数量："+ textbookQuantity+ "  教材出版社：" + textbookPublisher+ "  教材存放位置：" + textbookLocation+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+
+
+    function onConfirmEditClicked(){
+
+        const isbn = document.getElementById("editisbn").value;
+        const courseId = document.getElementById("editCourseId").value;
+        const textbookName = document.getElementById("editTextbookName").value;
+        const textbookQuantity = document.getElementById("editTextbookQuantity").value;
+        const textbookPublisher = document.getElementById("editTextbookPublisher").value;
+        const textbookLocation = document.getElementById("editTextbookLocation").value;
+
+        const editData = {
+            isbn: isbn,
+            courseId: courseId,
+            textbookName: textbookName,
+            textbookQuantity: textbookQuantity,
+            textbookPublisher: textbookPublisher,
+            textbookLocation: textbookLocation
+        };
+
+        axios.put(url+"textbook",editData).then(response=>{
+            console.log(response.data)
+        })
+            .catch(error=>
+            {
+                console.log("error!");
+            });
+    }
+
+
+    document.getElementById('editBtn').addEventListener('click', function () {
+        // 使用你的方式显示对话框 (比如使用 Layui 等)
+        // ...
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            const dialogIndex = layer.open({
+                type: 1,
+                title: '修改界面',
+                area: ['600px', '300px'],
+                content: '<div id="editContent">`\n' +
+                    '    <div>\n' +
+                    '        <label class="layui-form-label">图书ISBN</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入图书ISBN" class="layui-input" id="editisbn">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">课程ID</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入课程ID" class="layui-input" id="editCourseId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教材名字</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教材名字" class="layui-input" id="editTextbookName">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室数量</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教材数量" class="layui-input" id="editTextbookQuantity">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室出版社</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教材出版社" class="layui-input" id="editTextbookPublisher">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">教室存放位置</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教材存放位置" class="layui-input" id="editTextbookLocation">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <button id="confirmEdit" type="button" class="layui-btn layui-btn-radius">确认修改</button>\n' +
+                    '    </div>\n' +
+                    '</div>',
+                success: function () {
+                    // 在弹窗成功打开时，添加确认修改按钮的点击事件监听
+                    document.getElementById('confirmEdit').addEventListener('click',onConfirmEditClicked);
+                },
+                end: function () {
+                    // 在对话框关闭时，移除确认修改按钮的点击事件监听，避免内存泄漏
+                    init()
+                    document.getElementById('confirmEdit').removeEventListener('click', onConfirmEditClicked);
+                }
+            });
+        });
+    });
+    layui.use('layer', function() {
+        var layer = layui.layer;
+
+        // 监听按钮点击事件
+        document.getElementById('openAddTextbookBox').addEventListener('click', function() {
+            // 构建输入框的HTML字符串
+            var inputHtml = `
+      <div class="layui-form-item">
+        <label class="layui-form-label">教材编号</label>
+        <div class="layui-input-block">
+          <input type="text" name=" isbn" placeholder="请输入教材编号" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">课程</label>
+        <div class="layui-input-block">
+          <input type="text" name="courseId" placeholder="请输入教材课程" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookName" placeholder="请输入教材名称" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">教材</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookQuantity" placeholder="请输入教材" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">教材出版商</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookPublisher" placeholder="请输入教材出版商" class="layui-input">
+        </div>
+      </div>
+        <div class="layui-form-item">
+        <label class="layui-form-label">教材位置</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookLocation" placeholder="请输入教材位置" class="layui-input">
+        </div>
+      </div>
+    `;
+
+            // 弹出输入框
+            layer.open({
+                title: '请输入信息',
+                content: inputHtml,
+                area: ['400px', '300px'], // 设置弹出框的宽高
+                btn: ['确认', '取消'],
+                yes: function (index, layero) {
+                    // 获取用户输入的值
+
+                    var classId = layero.find('input[name="classId"]').val();
+
+                    var isbn = layero.find('input[name="isbn"]').val();
+
+                    var textbookSendNumber = layero.find('input[name="textbookSendNumber"]').val();
+
+                    // TODO: 这里可以将用户输入的数据传递给后端进行处理，例如使用Ajax或其他方式发送给后端
+                    var textbookSend = {
+
+                        classId: classId,
+
+                        isbn: isbn,
+                        textbookSendNumber: textbookSendNumber
+                    };
+                    console.log(textbookSend)
+                    $.ajax({
+                        url: '/textbookSend/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(textbookSend),
+                        success: function (data) {
+                            // 成功处理后的操作，例如提示保存成功
+                            console.log(data);
+                            if(data.code == 200){
+                                init();
+                            }
+                        },
+                    });
+                    // 关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

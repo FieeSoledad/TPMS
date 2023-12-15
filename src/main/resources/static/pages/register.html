@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>TPMS Register</title>
+
+    <link rel="stylesheet" href="../layui/css/layui.css">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .container{
+            width: 1000px;
+            height: 800px;
+            min-height: 320px;
+            max-height: 320px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            padding: 20px;
+            z-index: 130;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 3px 18px rgba(100, 0, 0, .5);
+            font-size: 16px;
+        }
+
+        /*.box {*/
+        /*    width: 1500px;*/
+        /*    height: 700px;*/
+        /*    background-color: #ffffff;*/
+        /*    text-align: center;*/
+        /*    line-height: 0px;*/
+        /*}*/
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="layui-row">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <form class="layui-form" action="http://localhost:8080/register/submit" method="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户id</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="userin" name="user_id" required  lay-verify="required" placeholder="请输入用户id" autocomplete="off" class="layui-input">
+                                <p id="userLengthPrompt" style="color: #6C6C6C;display: none;">账号长度不超过8!</p>
+                                <p id="userExsitPrompt" style="color: #6C6C6C;display: none">该账号已被占用!</p>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_name" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码</label>
+                            <div class="layui-input-block">
+                                <input type="password" id="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                <p id="pwdLengthPrompt" style="color:#6C6C6C;display: none">密码长度超过20!</p>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="role" value="管理员" title="管理员">
+                                <input type="radio" name="role" value="老师" title="老师" checked>
+                                <input type="radio" name="role" value="学生" title="学生">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">专业id</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="major_id" name="major_id" required  lay-verify="required" placeholder="请输入专业id" autocomplete="off" class="layui-input">
+                                <p id="majorLengthPrompt" style="color: #6C6C6C;display: none">专业id长度超过8!</p>
+                                <p id="majorExsitPrompt" style="color: #6C6C6C;display: none">不存在的专业id!</p>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../layui/layui.js"></script>
+<script type="text/javascript" src="../js/axios.js"></script>
+
+<script>
+    // 获取输入框元素
+    const inputUserElement = document.getElementById("userin");
+
+    const inputMajorElement = document.getElementById("major_id");
+
+    const inputPasswordElement = document.getElementById("password");
+
+    const userLengthPrompt = document.getElementById("userLengthPrompt");
+
+    const userExsitPrompt = document.getElementById("userExsitPrompt");
+
+    const pwdLengthPrompt = document.getElementById("pwdLengthPrompt");
+
+    const majorLengthPrompt = document.getElementById("majorLengthPrompt");
+
+    const majorExsiePrompt = document.getElementById("majorExsitPrompt");
+
+    inputUserElement.addEventListener('blur', (event) => {
+        // 在输入框失去焦点时，执行相应的动作
+        const inputValue = event.target.value;
+        const inputLength = inputValue.length;
+
+        if(inputLength>8)
+        {
+            // alert("用户id长度超过8!")
+            userLengthPrompt.style.display = "block";
+            userExsitPrompt.style.display = "none";
+        }
+        else if(inputLength!=0)
+        {
+            userLengthPrompt.style.display = "none";
+
+            axios({  //封装了Ajax请求方法 能自动将json数据转换为JS对象
+                method:"get",
+                url:"http://localhost:8080/register/user_id/"+inputValue
+            }).then((response)=>{   //快速定义函数的方式
+                if(response.data=="1")
+                {
+                    userExsitPrompt.style.display = "block";
+                }
+                else
+                {
+                    userExsitPrompt.style.display = "none";
+                }
+            })
+        }
+    });
+
+    inputPasswordElement.addEventListener('blur', (event) => {
+        // 在输入框失去焦点时，执行相应的动作
+        const inputValue = event.target.value;
+        const inputLength = inputValue.length;
+        if(inputLength>20)
+        {
+            pwdLengthPrompt.style.display = "block"
+        }
+        else
+        {
+            pwdLengthPrompt.style.display = "none";
+        }
+    });
+
+    inputMajorElement.addEventListener('blur', (event) => {
+        // 在输入框失去焦点时，执行相应的动作
+        const inputValue = event.target.value;
+        const inputLength = inputValue.length;
+        if(inputLength>8)
+        {
+            majorLengthPrompt.style.display = "block";
+        }
+        else if(inputLength!=0)
+        {
+            majorLengthPrompt.style.display = "none";
+            axios({  //封装了Ajax请求方法 能自动将json数据转换为JS对象
+                method:"get",
+                url:"http://localhost:8080/register/major_id/"+inputValue
+            }).then((response)=>{   //快速定义函数的方式
+                if(response.data=="0")
+                {
+                    // alert("不存在的专业号")
+                    majorExsiePrompt.style.display = "block"
+                }
+                else
+                {
+                    majorExsiePrompt.style.display = "none"
+                }
+            })
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

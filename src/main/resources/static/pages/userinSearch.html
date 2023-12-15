@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>用户查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="userin" lay-filter="tabAllUser"></table>
+<div id="UserIdSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="userId" id="userId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的学生ID" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="MajorIdSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="majorId" id="majorId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的专业名称" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="RoleSearch">
+    <form id="addAdnUpDateForm3" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="role" id="role" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的用户类型" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="UserNameSearch">
+    <form id="addAdnUpDateForm4" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="userName" id="userName" lay-verify="title " autocomplete="off" placeholder="请输入你要查找用户名字" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript" prefix="fmt">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#UserIdSearch").hide();
+        $("#MajorIdSearch").hide();
+        $("#RoleSearch").hide();
+        $("#UserNameSearch").hide();
+        init();//列表首次加载
+    })
+
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#userin'
+                ,type:"get"
+                ,url:url + "userin/userinSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'userId', width:120, title: '学生ID'}
+                    ,{field:'majorId', width:150, title: '专业ID'}
+                    //,{field:'password', width:120, title: '分数'}
+                    ,{field:'role', width:150, title: '类型'}
+                    ,{field:'userName', width:120, title: '名字'}
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.5;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["studentid查询","majorid查询","role查询","name查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocstudentid();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDocmajorid()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn3: function(){
+                //按钮【按钮三】的回调
+                addDocrole();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn4: function(){
+                //按钮【按钮三】的回调
+                addDocusername();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,
+        });
+    }
+    function addDocstudentid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过学生ID查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#UserIdSearch"),
+            yes: function(index, layero){
+                var userId = $("#userId").val();
+                var data={userId:userId,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"userin/queryUserinByUserId",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var userId = data.userId;
+                            var majorId = data.majorId;
+                            var role = data.role;
+                            var userName = data.userName;
+                            layer.alert("查询结果： 学生ID" + userId+"  专业ID："+ majorId+ "  类型：" + role+"  名字：" + userName, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关用户");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDocmajorid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过专业ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#MajorIdSearch"),
+            yes: function(index, layero){
+                var majorId =$("#majorId").val();
+                var data={majorId:majorId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"userin/queryUserinByMajorId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var userId = item.userId;
+                            var majorId = item.majorId;
+                            var role = item.role;
+                            var userName = item.userName;
+                            msg += "学生ID" + userId+"  专业ID："+ majorId+ "  类型：" + role+"  名字：" + userName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDocrole(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过类型查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#RoleSearch"),
+            yes: function(index, layero){
+                var role =$("#role").val();
+                var data={role:role,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"userin/queryUserinByRole",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var userId = item.userId;
+                            var majorId = item.majorId;
+                            var role = item.role;
+                            var userName = item.userName;
+                            msg += "学生ID" + userId+"  专业ID："+ majorId+ "  类型：" + role+"  名字：" + userName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function addDocusername(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过名字查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#UserNameSearch"),
+            yes: function(index, layero){
+                var userName =$("#userName").val();
+                var data={userName:userName,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"userin/queryUserinByUserName",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var userId = item.userId;
+                            var majorId = item.majorId;
+                            var role = item.role;
+                            var userName = item.userName;
+                            msg += "学生ID" + userId+"  专业ID："+ majorId+ "  类型：" + role+"  名字：" + userName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+</script>
+</body>
+</html>

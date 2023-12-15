@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>考试查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="major" lay-filter="tabAllUser"></table>
+<div id="majorIdSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="majorId" id="majorId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的专业" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="collegeIdSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">校区</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="collegeId" id="collegeId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的校区" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="majorNameSearch">
+    <form id="addAdnUpDateForm3" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="majorName" id="majorName" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的班级id" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<!--添加启动修改事件的按钮-->
+<button type="button" class="layui-btn layui-btn-radius" id="editBtn" text-align="center">修改列表</button>
+<!--新增按钮-->
+<button id="openAddMajorBox" class="layui-btn layui-btn-normal">新增学生</button>
+<script src="../js/axios.js"></script>
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript" prefix="fmt">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#collegeIdSearch").hide();
+        $("#majorNameSearch").hide();
+        $("#majorIdSearch").hide();
+        init();//列表首次加载
+    })
+
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#major'
+                ,type:"get"
+                ,url:url + "major/majorSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'majorId', width:120, title: '专业ID'}
+                    ,{field:'collegeId', width:150, title: '校区ID'}
+                    ,{field:'majorName', width:120, title: '专业名称'}
+
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+    //查询按钮的实现
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.5;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["majorid查询","college查询","majorname查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDocmajorid();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoccollegeid()
+                //return false 开启该代码可禁止点击该按钮关闭
+            },btn3: function(){
+                //按钮【按钮二】的回调
+                addDocmajorname()
+                //return false 开启该代码可禁止点击该按钮关闭
+            },
+        });
+    }
+    function addDocmajorid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过专业号查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#majorIdSearch"),
+            yes: function(index, layero){
+                var majorId =$("#majorId").val();
+                var data={majorId:majorId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"major/queryMajorByMajorId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var majorName = item.majorName;
+                            var majorId = item.majorId;
+                            var collegeId = item.collegeId;
+                            msg += "校区号" +  collegeId + " 专业号: " +majorId + "专业名" +  majorName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoccollegeid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过校区id查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#collegeIdSearch"),
+            yes: function(index, layero){
+                var collegeId =$("#collegeId").val();
+                var data={collegeId:collegeId,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"major/queryMajorByCollegeId",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var majorName = item.majorName;
+                            var majorId = item.majorId;
+                            var collegeId = item.collegeId;
+                            msg += "校区号" +  collegeId + " 专业号: " +majorId + "专业名" +  majorName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDocmajorname(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过专业名字查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#majorNameSearch"),
+            yes: function(index, layero){
+                var majorName =$("#majorName").val();
+                var data={majorName:majorName,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"major/queryMajorByMajorName",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var majorName = item.majorName;
+                            var majorId = item.majorId;
+                            var collegeId = item.collegeId;
+                            msg += "校区号" +  collegeId + " 专业号: " +majorId + "专业名" +  majorName + "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function onConfirmEditClicked(){
+
+        const majorId = document.getElementById("editMajorId").value;
+        const collegeId = document.getElementById("editCollegeId").value;
+        const majorName = document.getElementById("editMajorName").value;
+
+        const editData = {
+            majorId: majorId,
+            collegeId: collegeId,
+            majorName: majorName
+        };
+
+        axios.put(url+"major",editData).then(response=>{
+            console.log(response.data)
+        })
+            .catch(error=>
+            {
+                console.log("error!");
+            });
+    }
+
+
+    document.getElementById('editBtn').addEventListener('click', function () {
+        // 使用你的方式显示对话框 (比如使用 Layui 等)
+        // ...
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            const dialogIndex = layer.open({
+                type: 1,
+                title: '修改界面',
+                area: ['600px', '300px'],
+                content: '<div id="editContent">`\n' +
+                    '    <div>\n' +
+                    '        <label class="layui-form-label">专业ID</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入专业ID" class="layui-input" id="editMajorId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">校区ID</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入校区ID" class="layui-input" id="editCollegeId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">专业名称</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入专业名称" class="layui-input" id="editMajorName">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <button id="confirmEdit" type="button" class="layui-btn layui-btn-radius">确认修改</button>\n' +
+                    '    </div>\n' +
+                    '</div>',
+                success: function () {
+                    // 在弹窗成功打开时，添加确认修改按钮的点击事件监听
+                    document.getElementById('confirmEdit').addEventListener('click',onConfirmEditClicked);
+
+                },
+                end: function () {
+                    // 在对话框关闭时，移除确认修改按钮的点击事件监听，避免内存泄漏
+                    init()
+                    document.getElementById('confirmEdit').removeEventListener('click', onConfirmEditClicked);
+                }
+            });
+        });
+    });
+
+    layui.use('layer', function() {
+        var layer = layui.layer;
+
+        // 监听按钮点击事件
+        document.getElementById('openAddMajorBox').addEventListener('click', function() {
+            // 构建输入框的HTML字符串
+            var inputHtml = `
+      <div class="layui-form-item">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-block">
+          <input type="text" name="majorId" placeholder="请输入专业ID" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">大学ID</label>
+        <div class="layui-input-block">
+          <input type="text" name="collegeId" placeholder="请输入大学ID" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">专业名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="majorName" placeholder="请输入专业名称" class="layui-input">
+        </div>
+      </div>
+
+    `;
+
+            // 弹出输入框
+            layer.open({
+                title: '请输入信息',
+                content: inputHtml,
+                area: ['400px', '300px'], // 设置弹出框的宽高
+                btn: ['确认', '取消'],
+                yes: function (index, layero) {
+                    // 获取用户输入的值
+                    var majorId= layero.find('input[name="majorId"]').val();
+                    var collegeId = layero.find('input[name="collegeId"]').val();
+                    var majorName = layero.find('input[name="majorName"]').val();
+
+
+                    // TODO: 这里可以将用户输入的数据传递给后端进行处理，例如使用Ajax或其他方式发送给后端
+                    var major = {
+                        majorId:majorId,
+                        collegeId: collegeId,
+                        majorName: majorName,
+
+                    };
+                    console.log(major)
+                    $.ajax({
+                        url: '/major/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(major),
+                        success: function (data) {
+                            // 成功处理后的操作，例如提示保存成功
+                            console.log(data);
+                            if(data.code == 200){
+                                init();
+                            }
+                        },
+                    });
+                    // 关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.TextbookOrderDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.TextbookOrder">
+        <!--@Table textbook_order-->
+        <result property="textbookOrderId" column="textbook_order_id" jdbcType="VARCHAR"/>
+        <result property="isbn" column="ISBN" jdbcType="VARCHAR"/>
+        <result property="textbookOrderNumber" column="textbook_order_number" jdbcType="INTEGER"/>
+        <result property="textbookOrderState" column="textbook_order_state" jdbcType="VARCHAR"/>
+        <result property="textbookOrderTime" column="textbook_order_time" jdbcType="VARCHAR"/>
+        <result property="textbookOrderPrice" column="textbook_order_price" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryTextbookOrderById" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_id = #{textbookOrderId}
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryTextbookOrderByTextbookOrderId" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_id = #{textbookOrderId}
+    </select>
+    <select id="queryTextbookOrderByISBN" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where ISBN = #{isbn}
+    </select>
+    <select id="queryTextbookOrderByTextbookOrderNumber" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_number = #{textbookOrderNumber}
+    </select>
+    <select id="queryTextbookOrderByTextbookOrderState" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_state = #{textbookOrderState}
+    </select>
+    <select id="queryTextbookOrderByTextbookOrderTime" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_time = #{textbookOrderTime}
+    </select>
+    <select id="queryTextbookOrderByTextbookOrderPrice" resultMap="BaseResultMap">
+        select
+            textbook_order_id, ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price
+        from textbook_order
+        where textbook_order_price = #{textbookOrderPrice}
+    </select>
+
+
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from textbook_order
+        <where>
+            <if test="textbookOrderId != null and textbookOrderId != ''">
+                and textbook_order_id = #{textbookOrderId}
+            </if>
+            <if test="isbn != null and isbn != ''">
+                and ISBN = #{isbn}
+            </if>
+            <if test="textbookOrderNumber != null">
+                and textbook_order_number = #{textbookOrderNumber}
+            </if>
+            <if test="textbookOrderState != null and textbookOrderState != ''">
+                and textbook_order_state = #{textbookOrderState}
+            </if>
+            <if test="textbookOrderTime != null">
+                and textbook_order_time = #{textbookOrderTime}
+            </if>
+            <if test="textbookOrderPrice != null">
+                and textbook_order_price = #{textbookOrderPrice}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="textbookOrderId" useGeneratedKeys="true">
+        insert into textbook_order(textbook_order_id,ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price)
+        values (#{textbookOrderId},#{isbn}, #{textbookOrderNumber}, #{textbookOrderState}, #{textbookOrderTime}, #{textbookOrderPrice})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="textbookOrderId" useGeneratedKeys="true">
+        insert into textbook_order(ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.isbn}, #{entity.textbookOrderNumber}, #{entity.textbookOrderState}, #{entity.textbookOrderTime}, #{entity.textbookOrderPrice})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="textbookOrderId" useGeneratedKeys="true">
+        insert into textbook_order(ISBN, textbook_order_number, textbook_order_state, textbook_order_time, textbook_order_price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.isbn}, #{entity.textbookOrderNumber}, #{entity.textbookOrderState}, #{entity.textbookOrderTime}, #{entity.textbookOrderPrice})
+        </foreach>
+        on duplicate key update
+        ISBN = values(ISBN),
+        textbook_order_number = values(textbook_order_number),
+        textbook_order_state = values(textbook_order_state),
+        textbook_order_time = values(textbook_order_time),
+        textbook_order_price = values(textbook_order_price)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update textbook_order
+        <set>
+            <if test="isbn != null and isbn != ''">
+                ISBN = #{isbn},
+            </if>
+            <if test="textbookOrderNumber != null">
+                textbook_order_number = #{textbookOrderNumber},
+            </if>
+            <if test="textbookOrderState != null and textbookOrderState != ''">
+                textbook_order_state = #{textbookOrderState},
+            </if>
+            <if test="textbookOrderTime != null">
+                textbook_order_time = #{textbookOrderTime},
+            </if>
+            <if test="textbookOrderPrice != null">
+                textbook_order_price = #{textbookOrderPrice},
+            </if>
+        </set>
+        where textbook_order_id = #{textbookOrderId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from textbook_order where textbook_order_id = #{textbookOrderId}
+    </delete>
+<!--查询数据中全部的内容    -->
+    <select id="textbookOrderSelectAll" resultMap="BaseResultMap">
+        select * from textbook_order limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="textbookOrderSelectAllTexO" resultMap="BaseResultMap">
+        select * from textbook_order
+    </select>
+
+
+</mapper>
+

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<h1>教材订单查看界面</h1>
+<button type="button" id="addDoc" class="layui-btn layui-btn-radius layui-btn-primary">查询</button>
+<table class="layui-hide" id="textbookOrder" lay-filter="tabAllUser"></table>
+<div id="TextbookOrderIdSearch">
+    <form id="addAdnUpDateForm1" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookOrderId" id="textbookOrderId" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材订单ID" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="ISBNSearch">
+    <form id="addAdnUpDateForm2" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="isbn" id="isbn" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的图书ISBN" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookOrderNumberSearch">
+    <form id="addAdnUpDateForm6" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookOrderNumber" id="textbookOrderNumber" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的教材数量" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookOrderStateSearch">
+    <form id="addAdnUpDateForm3" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookOrderState" id="textbookOrderState" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的订单状态" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookOrderTimeSearch">
+    <form id="addAdnUpDateForm4" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookOrderTime" id="textbookOrderTime" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的订单时间" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="TextbookOrderPriceSearch">
+    <form id="addAdnUpDateForm5" class="layui-form">
+        <div class ="layui-form-item">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block" >
+                <input type="text" name ="textbookOrderPrice" id="textbookOrderPrice" lay-verify="title " autocomplete="off" placeholder="请输入你要查找的价格" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--添加启动修改事件的按钮-->
+<button type="button" class="layui-btn layui-btn-radius" id="editBtn" text-align="center">修改列表</button>
+<!--新增按钮-->
+<button id="openAddtextbookOrderBox" class="layui-btn layui-btn-normal">新增学生</button>
+<script src="../js/axios.js"></script>
+
+<script src="../jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="../layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript" prefix="fmt">
+    var url = "http://localhost:8080/";
+
+    $(function () {
+        $("#TextbookOrderIdSearch").hide();
+        $("#ISBNSearch").hide();
+        $("#TextbookOrderNumberSearch").hide();
+        $("#TextbookOrderStateSearch").hide();
+        $("#TextbookOrderTimeSearch").hide();
+        $("#TextbookOrderPriceSearch").hide();
+        init();//列表首次加载
+    })
+
+    function init() {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#textbookOrder'
+                ,type:"get"
+                ,url:url + "textbookOrder/textbookOrderSelectAll"
+                ,request:{
+                    pageName:"pageIndex",
+                    limitName:"pageSize"
+                }
+                ,parseData:function (res) {
+                    var getRes = JSON.parse(JSON.stringify(res));
+                    console.log(getRes)
+                    return{
+                        "code":0,
+                        "msg":"",
+                        "count":getRes.count,
+                        "data":getRes.data
+                    }
+                }
+                ,cols: [ [
+                    {field:'textbookOrderId', width:120, title: '教材订单ID'}
+                    ,{field:'isbn', width:150, title: '图书ISBN'}
+                    ,{field:'textbookOrderNumber', width:120, title: '数量'}
+                    ,{field:'textbookOrderState', width:150, title: '订单状态'}
+                    ,{field:'textbookOrderTime', width:120, title: '订单时间'}
+                    ,{field:'textbookOrderPrice', width:120, title: '价格'}
+
+                ]]
+                ,page:true
+                ,limits:[5,10]
+                ,limit:5
+            });
+
+        });
+    }
+    //查询按钮的实现
+    $("#addDoc").click(function() {
+        addDoc();
+    })
+    function addDoc() {
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '查询界面',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["textbookorderid查询","isbn查询","textbookordernumber查询","textbookorderstate查询","textbookordertime查询","textbookorderprice查询"],
+            content: '选择你的查询方式',
+            yes: function(){
+                //按钮【按钮一】的回调
+                addDoctextbookorderid();
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDocisbn()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn3: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookordernumber();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn4: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookorderstate();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn5: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookordertime();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,btn6: function(){
+                //按钮【按钮三】的回调
+                addDoctextbookorderprice();
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            ,
+        });
+    }
+    function addDoctextbookorderid(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过教材订单ID查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookOrderIdSearch"),
+            yes: function(index, layero){
+                var textbookOrderId = $("#textbookOrderId").val();
+                var data={textbookOrderId:textbookOrderId,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByTextbookOrderId",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var textbookOrderId = data.textbookOrderId;
+                            var isbn = data.isbn;
+                            var textbookOrderNumber = data.textbookOrderNumber;
+                            var textbookOrderState = data.textbookOrderState;
+                            var textbookOrderTime = data.textbookOrderTime;
+                            var textbookOrderPrice = data.textbookOrderPrice;
+                            layer.alert("查询结果： 教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDocisbn(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过图书ISBN查询',
+            tipsMore: true,
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#ISBNSearch"),
+            yes: function(index, layero){
+                var isbn = $("#isbn").val();
+                var data={isbn:isbn,}
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByISBN",
+                    success: function(data) {
+                        if (data) {
+                            // 显示查询结果
+                            var textbookOrderId = data.textbookOrderId;
+                            var isbn = data.isbn;
+                            var textbookOrderNumber = data.textbookOrderNumber;
+                            var textbookOrderState = data.textbookOrderState;
+                            var textbookOrderTime = data.textbookOrderTime;
+                            var textbookOrderPrice = data.textbookOrderPrice;
+                            layer.alert("查询结果： 教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice, function(){
+                                layer.closeAll();
+                            });
+                        } else {
+                            // 查询结果为空时的处理
+                            layer.alert("未找到相关书");
+                        }
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            },
+            btn2: function(){
+                //点击"返回"按钮的回调
+                layer.close(layer.index);
+            },
+            btn3: function(){
+                //点击"返回"按钮的回调
+                layer.closeAll();
+            },
+            cancel: function(){
+                layer.close(layer.index);
+            }
+        });
+    }
+    function addDoctextbookordernumber(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookOrderNumberSearch"),
+            yes: function(index, layero){
+                var textbookOrderNumber =$("#textbookOrderNumber").val();
+                var data={textbookOrderNumber:textbookOrderNumber,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByTextbookOrderNumber",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var textbookOrderId = item.textbookOrderId;
+                            var isbn = item.isbn;
+                            var textbookOrderNumber = item.textbookOrderNumber;
+                            var textbookOrderState = item.textbookOrderState;
+                            var textbookOrderTime = item.textbookOrderTime;
+                            var textbookOrderPrice = item.textbookOrderPrice;
+                            msg += "教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookorderstate(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookOrderStateSearch"),
+            yes: function(index, layero){
+                var textbookOrderState =$("#textbookOrderState").val();
+                var data={textbookOrderState:textbookOrderState,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByTextbookOrderState",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var textbookOrderId = item.textbookOrderId;
+                            var isbn = item.isbn;
+                            var textbookOrderNumber = item.textbookOrderNumber;
+                            var textbookOrderState = item.textbookOrderState;
+                            var textbookOrderTime = item.textbookOrderTime;
+                            var textbookOrderPrice = item.textbookOrderPrice;
+                            msg += "教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookordertime(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookOrderTimeSearch"),
+            yes: function(index, layero){
+                var textbookOrderTime =$("#textbookOrderTime").val();
+                var data={textbookOrderTime:textbookOrderTime,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByTextbookOrderTime",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var textbookOrderId = item.textbookOrderId;
+                            var isbn = item.isbn;
+                            var textbookOrderNumber = item.textbookOrderNumber;
+                            var textbookOrderState = item.textbookOrderState;
+                            var textbookOrderTime = item.textbookOrderTime;
+                            var textbookOrderPrice = item.textbookOrderPrice;
+                            msg += "教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+    function addDoctextbookorderprice(){
+        h = window.innerHeight * 0.45;
+        w = window.innerWidth * 0.6;
+        layer.open({
+            type : 1,
+            title: '通过课程ID查询',
+            scrollbar:false,
+            area:[w+"px",h+"px"],
+            btn:["查询","返回","关闭"],
+            content:$("#TextbookOrderPriceSearch"),
+            yes: function(index, layero){
+                var textbookOrderPrice =$("#textbookOrderPrice").val();
+                var data={textbookOrderPrice:textbookOrderPrice,}
+                //按钮【按钮一】的回调
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    url: url+"textbookOrder/queryTextbookOrderByTextbookOrderPrice",
+                    success: function(data) {
+                        var getData = JSON.parse(data);
+                        var msg = "查询结果： <br>"
+                        $(getData.data).each(function (index,item) {
+                            console.log(item)
+                            var textbookOrderId = item.textbookOrderId;
+                            var isbn = item.isbn;
+                            var textbookOrderNumber = item.textbookOrderNumber;
+                            var textbookOrderState = item.textbookOrderState;
+                            var textbookOrderTime = item.textbookOrderTime;
+                            var textbookOrderPrice = item.textbookOrderPrice;
+                            msg += "教材订单ID" + textbookOrderId+"  图书ISBN："+ isbn+ "  数量：" + textbookOrderNumber+"  订单状态："+ textbookOrderState+ "  订单时间：" + textbookOrderTime+ "  价格：" + textbookOrderPrice+ "<br>"
+                        })
+                        layer.alert(msg, function(){
+                            layer.closeAll();
+                        });
+                    },
+                    error: function() {
+                        // 请求错误时的处理
+                        layer.alert("请求出错，请重试");
+                    }
+                });
+            }
+            ,btn2: function(){
+                //按钮【按钮二】的回调
+                addDoc()
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function onConfirmEditClicked(){
+
+        const textbookOrderId = document.getElementById("editTextbookOrderId").value;
+        const isbn = document.getElementById("editisbn").value;
+        const textbookOrderNumber = document.getElementById("editTextbookOrderNumber").value;
+        const textbookOrderState = document.getElementById("editTextbookOrderState").value;
+        const textbookOrderTime = document.getElementById("editTextbookOrderTime").value;
+        const textbookOrderPrice = document.getElementById("editTextbookOrderPrice").value;
+
+        const editData = {
+            textbookOrderId: textbookOrderId,
+            isbn: isbn,
+            textbookOrderNumber: textbookOrderNumber,
+            textbookOrderState: textbookOrderState,
+            textbooOrderTime: textbookOrderTime,
+            textbookOrderPrice: textbookOrderPrice
+        };
+
+        axios.put(url+"textbookOrder",editData).then(response=>{
+            console.log(response.data)
+        })
+            .catch(error=>
+            {
+                console.log("error!");
+            });
+    }
+
+
+    document.getElementById('editBtn').addEventListener('click', function () {
+        // 使用你的方式显示对话框 (比如使用 Layui 等)
+        // ...
+
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            const dialogIndex = layer.open({
+                type: 1,
+                title: '修改界面',
+                area: ['600px', '300px'],
+                content: '<div id="editContent">`\n' +
+                    '    <div>\n' +
+                    '        <label class="layui-form-label">教材订单ID</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入教材订单ID" class="layui-input" id="editTextbookOrderId">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">图书ISBN</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入图书ISBN" class="layui-input" id="editisbn">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">数量</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入数量" class="layui-input" id="editTextbookOrderNumber">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">订单状态</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入订单状态" class="layui-input" id="editTextbookOrderState">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">订单时间</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入订单时间" class="layui-input" id="editTextbookOrderTime">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <label class="layui-form-label">价格</label>\n' +
+                    '        <div class="layui-input-block">\n' +
+                    '        <input type="text" name="" placeholder="请输入价格" class="layui-input" id="editTextbookOrderPrice">\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <button id="confirmEdit" type="button" class="layui-btn layui-btn-radius">确认修改</button>\n' +
+                    '    </div>\n' +
+                    '</div>',
+                success: function () {
+                    // 在弹窗成功打开时，添加确认修改按钮的点击事件监听
+                    document.getElementById('confirmEdit').addEventListener('click',onConfirmEditClicked);
+                },
+                end: function () {
+                    // 在对话框关闭时，移除确认修改按钮的点击事件监听，避免内存泄漏
+                    init()
+                    document.getElementById('confirmEdit').removeEventListener('click', onConfirmEditClicked);
+                }
+            });
+        });
+    });
+    layui.use('layer', function() {
+        var layer = layui.layer;
+
+        // 监听按钮点击事件
+        document.getElementById('openAddtextbookOrderBox').addEventListener('click', function() {
+            // 构建输入框的HTML字符串
+            var inputHtml = `
+      <div class="layui-form-item">
+        <label class="layui-form-label">订单ID</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookOrderId" placeholder="请输入订单ID" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">isbn</label>
+        <div class="layui-input-block">
+          <input type="text" name="isbn" placeholder="请输入isbn" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">数量</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookOrderNumber" placeholder="请输入数量" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">订单</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookOrderState" placeholder="请输入订单" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookOrderTime" placeholder="请输入日期" class="layui-input">
+        </div>
+      </div>
+       <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-block">
+          <input type="text" name="textbookOrderPrice" placeholder="请输入价格" class="layui-input">
+        </div>
+      </div>
+    `;
+
+            // 弹出输入框
+            layer.open({
+                title: '请输入信息',
+                content: inputHtml,
+                area: ['400px', '300px'], // 设置弹出框的宽高
+                btn: ['确认', '取消'],
+                yes: function (index, layero) {
+                    // 获取用户输入的值
+                    var textbookOrderId= layero.find('input[name="textbookOrderId"]').val();
+                    var isbn = layero.find('input[name="isbn"]').val();
+                    var textbookOrderNumber = layero.find('input[name="textbookOrderNumber"]').val();
+                    var textbookOrderState = layero.find('input[name="textbookOrderState"]').val();
+
+                    var textbookOrderTime = layero.find('input[name="textbookOrderTime"]').val();
+                    var textbookOrderPrice = layero.find('input[name="textbookOrderPrice"]').val();
+
+                    // TODO: 这里可以将用户输入的数据传递给后端进行处理，例如使用Ajax或其他方式发送给后端
+                    var textbookOrder = {
+                        textbookOrderId:textbookOrderId,
+                        isbn: isbn,
+                        textbookOrderNumber: textbookOrderNumber,
+                        textbookOrderState: textbookOrderState,
+                        textbookOrderTime: textbookOrderTime,
+                        textbookOrderPrice: textbookOrderPrice
+                    };
+                    console.log(textbookOrder)
+                    $.ajax({
+                        url: '/textbookOrder/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(textbookOrder),
+                        success: function (data) {
+                            // 成功处理后的操作，例如提示保存成功
+                            console.log(data);
+                            if(data.code == 200){
+                                init();
+                            }
+                        },
+                    });
+                    // 关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.CourseArrangeDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.CourseArrange">
+        <!--@Table course_arrange-->
+        <result property="courseId" column="course_id" jdbcType="VARCHAR"/>
+        <result property="classroomId" column="classroom_id" jdbcType="VARCHAR"/>
+        <result property="courseArrangeTime" column="course_arrange_time" jdbcType="VARCHAR"/>
+        <result property="courseArrangePweek" column="course_arrange_Pweek" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          course_id, classroom_id, course_arrange_time, course_arrange_Pweek
+        from course_arrange
+        where course_id = #{courseId}
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from course_arrange
+        <where>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+            <if test="classroomId != null and classroomId != ''">
+                and classroom_id = #{classroomId}
+            </if>
+            <if test="courseArrangeTime != null">
+                and course_arrange_time = #{courseArrangeTime}
+            </if>
+            <if test="courseArrangePweek != null">
+                and course_arrange_Pweek = #{courseArrangePweek}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course_arrange(course_id,classroom_id, course_arrange_time, course_arrange_Pweek)
+        values (#{courseId},#{classroomId}, #{courseArrangeTime}, #{courseArrangePweek})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course_arrange(classroom_id, course_arrange_time, course_arrange_Pweek)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.classroomId}, #{entity.courseArrangeTime}, #{entity.courseArrangePweek})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course_arrange(classroom_id, course_arrange_time, course_arrange_Pweek)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.classroomId}, #{entity.courseArrangeTime}, #{entity.courseArrangePweek})
+        </foreach>
+        on duplicate key update
+        classroom_id = values(classroom_id),
+        course_arrange_time = values(course_arrange_time),
+        course_arrange_Pweek = values(course_arrange_Pweek)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update course_arrange
+        <set>
+            <if test="classroomId != null and classroomId != ''">
+                classroom_id = #{classroomId},
+            </if>
+            <if test="courseArrangeTime != null">
+                course_arrange_time = #{courseArrangeTime},
+            </if>
+            <if test="courseArrangePweek != null">
+                course_arrange_Pweek = #{courseArrangePweek},
+            </if>
+        </set>
+        where course_id = #{courseId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from course_arrange where course_id = #{courseId}
+    </delete>
+
+<!--查询数据库的全部信息-->
+    <select id="courseArrangeSelectAll" resultMap="BaseResultMap">
+        select * from course_arrange limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="courseArrangeSelectAllCouA" resultMap="BaseResultMap">
+        select * from course_arrange
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryCourseArrangeByCourseId" resultMap="BaseResultMap">
+        select
+            course_id, classroom_id, course_arrange_time, course_arrange_Pweek
+        from course_arrange
+        where course_id = #{courseId}
+    </select>
+    <select id="queryCourseArrangeByClassroomId" resultMap="BaseResultMap">
+        select
+            course_id, classroom_id, course_arrange_time, course_arrange_Pweek
+        from course_arrange
+        where classroom_id = #{classroomId}
+    </select>
+    <select id="queryCourseArrangeByCourseArrangeTime" resultMap="BaseResultMap">
+        select
+            course_id, classroom_id, course_arrange_time, course_arrange_Pweek
+        from course_arrange
+        where course_arrange_time = #{courseArrangeTime}
+    </select>
+    <select id="queryCourseArrangeByCourseArrangePweek" resultMap="BaseResultMap">
+        select
+            course_id, classroom_id, course_arrange_time, course_arrange_Pweek
+        from course_arrange
+        where course_arrange_Pweek = #{courseArrangePweek}
+    </select>
+
+</mapper>
+

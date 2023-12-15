@@ -1,0 +1,105 @@
+[INFO]2023-09-04 14:47:01,613 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 36220 (E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-09-04 14:47:01,615 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-09-04 14:47:01,689 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-09-04 14:47:01,689 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[WARN]2023-09-04 14:47:01,996 - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.huadi.project.tpms.TpmsApplication]; nested exception is java.io.FileNotFoundException: class path resource [com/huadi/project/tpms/aop/AroundAop.class] cannot be opened because it does not exist
+[ERROR]2023-09-04 14:47:02,072 - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.huadi.project.tpms.TpmsApplication]; nested exception is java.io.FileNotFoundException: class path resource [com/huadi/project/tpms/aop/AroundAop.class] cannot be opened because it does not exist
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:188)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:331)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:247)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:311)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:112)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:748)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:564)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
+	at com.huadi.project.tpms.TpmsApplication.main(TpmsApplication.java:12)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.io.FileNotFoundException: class path resource [com/huadi/project/tpms/aop/AroundAop.class] cannot be opened because it does not exist
+	at org.springframework.core.io.ClassPathResource.getInputStream(ClassPathResource.java:203)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.getClassReader(SimpleMetadataReader.java:55)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.<init>(SimpleMetadataReader.java:48)
+	at org.springframework.core.type.classreading.SimpleMetadataReaderFactory.getMetadataReader(SimpleMetadataReaderFactory.java:103)
+	at org.springframework.boot.type.classreading.ConcurrentReferenceCachingMetadataReaderFactory.createMetadataReader(ConcurrentReferenceCachingMetadataReaderFactory.java:86)
+	at org.springframework.boot.type.classreading.ConcurrentReferenceCachingMetadataReaderFactory.getMetadataReader(ConcurrentReferenceCachingMetadataReaderFactory.java:73)
+	at org.springframework.core.type.classreading.SimpleMetadataReaderFactory.getMetadataReader(SimpleMetadataReaderFactory.java:81)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:303)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:249)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:206)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:174)
+	... 18 common frames omitted
+[INFO]2023-09-04 14:49:38,050 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 25384 (E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-09-04 14:49:38,051 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-09-04 14:49:38,092 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-09-04 14:49:38,092 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-09-04 14:49:39,542 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-09-04 14:49:39,543 - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO]2023-09-04 14:49:39,543 - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO]2023-09-04 14:49:39,543 - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO]2023-09-04 14:49:39,547 - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO]2023-09-04 14:49:39,552 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 14:49:39,554 - Starting service [Tomcat]
+[INFO]2023-09-04 14:49:39,554 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-09-04 14:49:39,676 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-09-04 14:49:39,676 - Root WebApplicationContext: initialization completed in 1583 ms
+[INFO]2023-09-04 14:49:40,204 - HikariPool-1 - Starting...
+[WARN]2023-09-04 14:49:40,206 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-09-04 14:49:40,342 - HikariPool-1 - Start completed.
+[INFO]2023-09-04 14:49:41,009 - LiveReload server is running on port 35729
+[INFO]2023-09-04 14:49:41,036 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 14:49:41,057 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-09-04 14:49:41,100 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-09-04 14:49:41,109 - Started TpmsApplication in 3.552 seconds (JVM running for 4.765)
+[INFO]2023-09-04 14:49:54,328 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-09-04 14:49:54,328 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-09-04 14:49:54,329 - Completed initialization in 1 ms
+[INFO]2023-09-04 15:02:45,331 - Restarting due to 87 class path changes (0 additions, 0 deletions, 87 modifications)
+[INFO]2023-09-04 15:02:45,693 - Pausing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 15:02:45,693 - Stopping service [Tomcat]
+[INFO]2023-09-04 15:02:45,694 - Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO]2023-09-04 15:02:45,698 - Stopping ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 15:02:45,700 - Destroying ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 15:02:45,704 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-09-04 15:02:45,713 - HikariPool-1 - Shutdown completed.
+[INFO]2023-09-04 15:02:45,885 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 25384 (E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-09-04 15:02:45,885 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-09-04 15:02:46,438 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-09-04 15:02:46,439 - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO]2023-09-04 15:02:46,439 - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO]2023-09-04 15:02:46,439 - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO]2023-09-04 15:02:46,439 - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO]2023-09-04 15:02:46,439 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 15:02:46,440 - Starting service [Tomcat]
+[INFO]2023-09-04 15:02:46,440 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-09-04 15:02:46,519 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-09-04 15:02:46,519 - Root WebApplicationContext: initialization completed in 632 ms
+[INFO]2023-09-04 15:02:46,673 - HikariPool-2 - Starting...
+[WARN]2023-09-04 15:02:46,673 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-09-04 15:02:46,677 - HikariPool-2 - Start completed.
+[INFO]2023-09-04 15:02:46,916 - LiveReload server is running on port 35729
+[INFO]2023-09-04 15:02:46,927 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-09-04 15:02:46,928 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-09-04 15:02:46,939 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-09-04 15:02:46,940 - Started TpmsApplication in 1.088 seconds (JVM running for 790.595)
+[INFO]2023-09-04 15:02:46,942 - Condition evaluation unchanged
+[INFO]2023-09-04 15:02:48,615 - Starting TpmsApplicationTests using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 24200 (started by LENOV in E:\�μ�\ʵѵ\��ѧ����ƽ̨\C �����׶�\2.��Ŀ��Դ����\tpms\tpms\tpms)
+[INFO]2023-09-04 15:02:48,617 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-09-04 15:02:50,854 - HikariPool-1 - Starting...
+[WARN]2023-09-04 15:02:50,858 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-09-04 15:02:51,066 - HikariPool-1 - Start completed.
+[INFO]2023-09-04 15:02:53,084 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-09-04 15:02:53,098 - Started TpmsApplicationTests in 4.965 seconds (JVM running for 6.179)
+[INFO]2023-09-04 15:02:53,520 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-09-04 15:02:53,542 - HikariPool-1 - Shutdown completed.
+[INFO]2023-09-04 15:03:43,401 - HikariPool-2 - Shutdown initiated...
+[INFO]2023-09-04 15:03:43,406 - HikariPool-2 - Shutdown completed.

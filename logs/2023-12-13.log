@@ -1,0 +1,103 @@
+[INFO]2023-12-13 13:17:51,590 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 25128 (E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-12-13 13:17:51,592 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-12-13 13:17:51,654 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-12-13 13:17:51,655 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[WARN]2023-12-13 13:17:52,726 - No MyBatis mapper was found in '[com.huadi.project.tpms.dao]' package. Please check your configuration.
+[WARN]2023-12-13 13:17:52,918 - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'projectingArgumentResolverBeanPostProcessor' defined in class path resource [org/springframework/data/web/config/ProjectingArgumentResolverRegistrar.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: com/huadi/project/tpms/utils/result/DataResult
+[ERROR]2023-12-13 13:17:53,028 - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'projectingArgumentResolverBeanPostProcessor' defined in class path resource [org/springframework/data/web/config/ProjectingArgumentResolverRegistrar.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: com/huadi/project/tpms/utils/result/DataResult
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:537)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:765)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
+	at com.huadi.project.tpms.TpmsApplication.main(TpmsApplication.java:12)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: com/huadi/project/tpms/utils/result/DataResult
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:537)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:410)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans(BeanFactoryAdvisorRetrievalHelper.java:91)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findCandidateAdvisors(AbstractAdvisorAutoProxyCreator.java:111)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:92)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:255)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:531)
+	... 19 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: com/huadi/project/tpms/utils/result/DataResult
+	at java.lang.Class.getDeclaredMethods0(Native Method)
+	at java.lang.Class.privateGetDeclaredMethods(Class.java:2701)
+	at java.lang.Class.getDeclaredMethods(Class.java:1975)
+	at org.aspectj.internal.lang.reflect.AjTypeImpl.getDeclarePrecedence(AjTypeImpl.java:1005)
+	at org.springframework.aop.aspectj.annotation.AspectMetadata.<init>(AspectMetadata.java:97)
+	at org.springframework.aop.aspectj.annotation.BeanFactoryAspectJAdvisorsBuilder.buildAspectJAdvisors(BeanFactoryAspectJAdvisorsBuilder.java:106)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:95)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:255)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:531)
+	... 40 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.huadi.project.tpms.utils.result.DataResult
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:382)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:349)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:348)
+	at org.springframework.boot.devtools.restart.classloader.RestartClassLoader.loadClass(RestartClassLoader.java:145)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 52 common frames omitted
+[INFO]2023-12-13 13:20:20,175 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 14796 (E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\课件\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-12-13 13:20:20,177 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-12-13 13:20:20,218 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-12-13 13:20:20,218 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-12-13 13:20:21,503 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-12-13 13:20:21,504 - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO]2023-12-13 13:20:21,504 - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO]2023-12-13 13:20:21,505 - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO]2023-12-13 13:20:21,509 - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO]2023-12-13 13:20:21,515 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-12-13 13:20:21,516 - Starting service [Tomcat]
+[INFO]2023-12-13 13:20:21,516 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-12-13 13:20:21,602 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-12-13 13:20:21,602 - Root WebApplicationContext: initialization completed in 1383 ms
+[INFO]2023-12-13 13:20:22,116 - HikariPool-1 - Starting...
+[WARN]2023-12-13 13:20:22,118 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-12-13 13:20:22,274 - HikariPool-1 - Start completed.
+[INFO]2023-12-13 13:20:22,863 - LiveReload server is running on port 35729
+[INFO]2023-12-13 13:20:22,878 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-12-13 13:20:22,893 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-12-13 13:20:22,937 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-12-13 13:20:22,951 - Started TpmsApplication in 3.281 seconds (JVM running for 4.324)
+[INFO]2023-12-13 13:20:31,270 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-12-13 13:20:31,270 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-12-13 13:20:31,272 - Completed initialization in 2 ms
+[INFO]2023-12-13 13:31:14,825 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-12-13 13:31:14,834 - HikariPool-1 - Shutdown completed.

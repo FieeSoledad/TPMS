@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.ClassroomDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Classroom">
+        <!--@Table classroom-->
+        <result property="classroomId" column="classroom_id" jdbcType="VARCHAR"/>
+        <result property="classroomSize" column="classroom_size" jdbcType="INTEGER"/>
+        <result property="classroomPlace" column="classroom_place" jdbcType="VARCHAR"/>
+        <result property="classroomType" column="classroom_type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          classroom_id, classroom_size, classroom_place, classroom_type
+        from classroom
+        where classroom_id = #{classroomId}
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryClassroomByClassroomId" resultMap="BaseResultMap">
+        select
+            classroom_id, classroom_size, classroom_place, classroom_type
+        from classroom
+        where classroom_id = #{classroomId}
+    </select>
+
+    <select id="queryClassroomByClassroomSize" resultMap="BaseResultMap">
+        select
+            classroom_id, classroom_size, classroom_place, classroom_type
+        from classroom
+        where classroom_size = #{classroomSize}
+    </select>
+
+    <select id="queryClassroomByClassroomPlace" resultMap="BaseResultMap">
+        select
+            classroom_id, classroom_size, classroom_place, classroom_type
+        from classroom
+        where classroom_place = #{classroomPlace}
+    </select>
+
+    <select id="queryClassroomByClassroomType" resultMap="BaseResultMap">
+        select
+            classroom_id, classroom_size, classroom_place, classroom_type
+        from classroom
+        where classroom_type = #{classroomType}
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from classroom
+        <where>
+            <if test="classroomId != null and classroomId != ''">
+                and classroom_id = #{classroomId}
+            </if>
+            <if test="classroomSize != null">
+                and classroom_size = #{classroomSize}
+            </if>
+            <if test="classroomPlace != null and classroomPlace != ''">
+                and classroom_place = #{classroomPlace}
+            </if>
+            <if test="classroomType != null and classroomType != ''">
+                and classroom_type = #{classroomType}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="classroomId" useGeneratedKeys="true">
+        insert into classroom(classroom_size, classroom_place, classroom_type)
+        values (#{classroomSize}, #{classroomPlace}, #{classroomType})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="classroomId" useGeneratedKeys="true">
+        insert into classroom(classroom_size, classroom_place, classroom_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.classroomSize}, #{entity.classroomPlace}, #{entity.classroomType})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="classroomId" useGeneratedKeys="true">
+        insert into classroom(classroom_size, classroom_place, classroom_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.classroomSize}, #{entity.classroomPlace}, #{entity.classroomType})
+        </foreach>
+        on duplicate key update
+        classroom_size = values(classroom_size),
+        classroom_place = values(classroom_place),
+        classroom_type = values(classroom_type)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update classroom
+        <set>
+            <if test="classroomSize != null">
+                classroom_size = #{classroomSize},
+            </if>
+            <if test="classroomPlace != null and classroomPlace != ''">
+                classroom_place = #{classroomPlace},
+            </if>
+            <if test="classroomType != null and classroomType != ''">
+                classroom_type = #{classroomType},
+            </if>
+        </set>
+        where classroom_id = #{classroomId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from classroom where classroom_id = #{classroomId}
+    </delete>
+
+<!-- 查询全部的功能-->
+    <select id="classroomSelectAll" resultMap="BaseResultMap">
+        select * from classroom limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="classroomSelectAllClaR" resultMap="BaseResultMap">
+        select * from classroom
+    </select>
+
+
+</mapper>
+

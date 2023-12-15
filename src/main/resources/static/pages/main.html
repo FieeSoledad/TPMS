@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<body>
+<h1>Main界面</h1>
+
+
+<button onclick="goStudent()">前往student表查看数据</button>
+<button onclick="goClass()">前往class表查看数据</button>
+<button onclick="goClassroom()">前往classroom表查看数据</button>
+<button onclick="goCollege()">前往college表查看数据</button>
+
+<button onclick="goCourseArrange()">前往coursearrange表查看数据</button>
+<button onclick="goCourse()">前往Course表查看数据</button>
+<button onclick="goExamArrange()">前往ExamArrange表查看数据</button>
+<button onclick="goExam()">前往Exam表查看数据</button>
+<script type="text/javascript" src="layui/layui.js"></script>
+<script type="text/javascript" src="jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    var url = "http://localhost:8080/";
+    function goStudent(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goStudent";
+    }
+
+    function goClass(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goClass";
+    }
+
+    function goClassroom(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goClassroom";
+    }
+
+    function goCollege(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goCollege";
+    }
+    function goCourse(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goCourse";
+    }
+
+    function goCourseArrange(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goCourseArrange";
+    }
+
+    function goExam(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goExam";
+    }
+
+    function goExamArrange(){
+        //window.location.href = 'studentSearch.html';
+        location.href = "goExamArrange";
+    }
+</script>
+
+</body>
+</html>

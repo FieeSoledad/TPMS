@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.UserinDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Userin">
+        <!--@Table userin-->
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="majorId" column="major_id" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="role" column="role" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryUserinById" resultMap="BaseResultMap">
+        select
+            user_id, major_id, password, role, user_name
+        from userin
+        where user_id = #{userId}
+    </select>
+<!--查询按钮的实现-->
+    <select id="queryUserinByUserId" resultMap="BaseResultMap">
+        select
+            user_id, major_id, password, role, user_name
+        from userin
+        where user_id = #{userId}
+    </select>
+    <select id="queryUserinByMajorId" resultMap="BaseResultMap">
+        select
+            user_id, major_id, password, role, user_name
+        from userin
+        where major_id = #{majorId}
+    </select>
+    <select id="queryUserinByRole" resultMap="BaseResultMap">
+        select
+            user_id, major_id, password, role, user_name
+        from userin
+        where role = #{role}
+    </select>
+    <select id="queryUserinByUserName" resultMap="BaseResultMap">
+        select
+            user_id, major_id, password, role, user_name
+        from userin
+        where user_name = #{userName}
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from userin
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="majorId != null and majorId != ''">
+                and major_id = #{majorId}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="role != null and role != ''">
+                and role = #{role}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId">
+        insert into userin(user_id,major_id, password, role, user_name)
+        values (#{userId},#{majorId}, #{password}, #{role}, #{userName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into userin(major_id, password, role, user_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.majorId}, #{entity.password}, #{entity.role}, #{entity.userName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into userin(major_id, password, role, user_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.majorId}, #{entity.password}, #{entity.role}, #{entity.userName})
+        </foreach>
+        on duplicate key update
+        major_id = values(major_id),
+        password = values(password),
+        role = values(role),
+        user_name = values(user_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update userin
+        <set>
+            <if test="majorId != null and majorId != ''">
+                major_id = #{majorId},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="role != null and role != ''">
+                role = #{role},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from userin where user_id = #{userId}
+    </delete>
+<!--数据库中全部内容的查询-->
+
+    <select id="userinSelectAll" resultMap="BaseResultMap">
+        select * from userin limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="userinSelectAllUse" resultMap="BaseResultMap">
+        select * from userin
+    </select>
+
+</mapper>
+

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.StudentDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Student">
+        <!--@Table student-->
+        <result property="studentId" column="student_id" jdbcType="VARCHAR"/>
+        <result property="classId" column="class_id" jdbcType="VARCHAR"/>
+        <result property="studentName" column="student_name" jdbcType="VARCHAR"/>
+        <result property="studentPhone" column="student_phone" jdbcType="VARCHAR"/>
+        <result property="studentGender" column="student_gender" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryStudentById" resultMap="BaseResultMap">
+        select
+          student_id, class_id, student_name, student_phone, student_gender
+        from student
+        where student_id = #{studentId}
+    </select>
+<!--查询全部数据内容的方法-->
+    <select id="studentSelectAll" resultType="com.huadi.project.tpms.entity.Student">
+        select * from student limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="studentSelectAllStu" resultMap="BaseResultMap">
+        select * from student
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from student
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and class_id = #{classId}
+            </if>
+            <if test="studentName != null and studentName != ''">
+                and student_name = #{studentName}
+            </if>
+            <if test="studentPhone != null and studentPhone != ''">
+                and student_phone = #{studentPhone}
+            </if>
+            <if test="studentGender != null and studentGender != ''">
+                and student_gender = #{studentGender}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="studentId" useGeneratedKeys="true">
+        insert into student(student_id ,class_id, student_name, student_phone, student_gender)
+        values (#{studentId},#{classId}, #{studentName}, #{studentPhone}, #{studentGender})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="studentId" useGeneratedKeys="true">
+        insert into student(class_id, student_name, student_phone, student_gender)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.classId}, #{entity.studentName}, #{entity.studentPhone}, #{entity.studentGender})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="studentId" useGeneratedKeys="true">
+        insert into student(class_id, student_name, student_phone, student_gender)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.classId}, #{entity.studentName}, #{entity.studentPhone}, #{entity.studentGender})
+        </foreach>
+        on duplicate key update
+        class_id = values(class_id),
+        student_name = values(student_name),
+        student_phone = values(student_phone),
+        student_gender = values(student_gender)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student
+        <set>
+            <if test="classId != null and classId != ''">
+                class_id = #{classId},
+            </if>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{studentName},
+            </if>
+            <if test="studentPhone != null and studentPhone != ''">
+                student_phone = #{studentPhone},
+            </if>
+            <if test="studentGender != null and studentGender != ''">
+                student_gender = #{studentGender},
+            </if>
+        </set>
+        where student_id = #{studentId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student where student_id = #{studentId}
+    </delete>
+<!--查询按钮的实现-->
+    <select id="queryStudentByClassId" resultMap="BaseResultMap">
+        select
+            student_id, class_id, student_name, student_phone, student_gender
+        from student
+        where class_id = #{classId}
+    </select>
+
+    <select id="queryStudentByStudentPhone" resultMap="BaseResultMap">
+        select
+            student_id, class_id, student_name, student_phone, student_gender
+        from student
+        where student_phone = #{studentPhone}
+    </select>
+
+    <select id="queryStudentByStudentName" resultMap="BaseResultMap">
+        select
+            student_id, class_id, student_name, student_phone, student_gender
+        from student
+        where student_name = #{studentName}
+    </select>
+
+    <select id="queryStudentByStudentGender" resultMap="BaseResultMap">
+        select
+            student_id, class_id, student_name, student_phone, student_gender
+        from student
+        where student_gender = #{studentGender}
+    </select>
+
+</mapper>
+

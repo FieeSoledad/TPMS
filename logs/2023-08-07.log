@@ -1,0 +1,71 @@
+[INFO]2023-08-07 14:53:44,593 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 29556 (E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-08-07 14:53:44,595 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-08-07 14:53:44,645 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-08-07 14:53:44,645 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-08-07 14:53:46,273 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-08-07 14:53:46,274 - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO]2023-08-07 14:53:46,274 - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO]2023-08-07 14:53:46,274 - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO]2023-08-07 14:53:46,277 - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO]2023-08-07 14:53:46,283 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-07 14:53:46,284 - Starting service [Tomcat]
+[INFO]2023-08-07 14:53:46,285 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-08-07 14:53:46,409 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-08-07 14:53:46,409 - Root WebApplicationContext: initialization completed in 1763 ms
+[INFO]2023-08-07 14:53:46,931 - HikariPool-1 - Starting...
+[WARN]2023-08-07 14:53:46,932 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-08-07 14:53:47,035 - HikariPool-1 - Start completed.
+[WARN]2023-08-07 14:53:47,594 - Unable to start LiveReload server
+[INFO]2023-08-07 14:53:47,612 - Starting ProtocolHandler ["http-nio-8080"]
+[WARN]2023-08-07 14:53:47,616 - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8080 is already in use
+[INFO]2023-08-07 14:53:47,619 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-08-07 14:53:47,624 - HikariPool-1 - Shutdown completed.
+[INFO]2023-08-07 14:53:47,626 - Pausing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-07 14:53:47,626 - Stopping service [Tomcat]
+[INFO]2023-08-07 14:53:47,629 - Stopping ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-07 14:53:47,629 - Destroying ProtocolHandler ["http-nio-8080"]
+[ERROR]2023-08-07 14:53:47,681 - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO]2023-08-07 14:54:03,611 - Starting TpmsApplication using Java 1.8.0_201 on LAPTOP-4P6GVJLU with PID 26724 (E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes started by LENOV in E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms)
+[INFO]2023-08-07 14:54:03,612 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-08-07 14:54:03,652 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-08-07 14:54:03,652 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-08-07 14:54:04,885 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-08-07 14:54:04,886 - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO]2023-08-07 14:54:04,886 - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO]2023-08-07 14:54:04,886 - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO]2023-08-07 14:54:04,889 - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO]2023-08-07 14:54:04,895 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-07 14:54:04,896 - Starting service [Tomcat]
+[INFO]2023-08-07 14:54:04,897 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-08-07 14:54:05,011 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-08-07 14:54:05,011 - Root WebApplicationContext: initialization completed in 1359 ms
+[INFO]2023-08-07 14:54:05,604 - HikariPool-1 - Starting...
+[WARN]2023-08-07 14:54:05,605 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-08-07 14:54:05,771 - HikariPool-1 - Start completed.
+[INFO]2023-08-07 14:54:06,354 - LiveReload server is running on port 35729
+[INFO]2023-08-07 14:54:06,369 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-07 14:54:06,382 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-08-07 14:54:06,410 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-08-07 14:54:06,418 - Started TpmsApplication in 3.27 seconds (JVM running for 4.526)
+[INFO]2023-08-07 14:54:23,151 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-08-07 14:54:23,151 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-08-07 14:54:23,152 - Completed initialization in 1 ms
+[WARN]2023-08-07 14:55:06,871 - Resolved [org.springframework.jdbc.BadSqlGrammarException: <EOL><EOL>### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL><EOL>### The error may exist in file [E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes\mapper\ExamDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: select exam_id, course_id, user_id, classroom_id, exam_type, exam_state, exam_time         from exam limit ? ,?<EOL><EOL>### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL>; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list']
+[WARN]2023-08-07 14:55:09,516 - Resolved [org.springframework.jdbc.BadSqlGrammarException: <EOL><EOL>### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL><EOL>### The error may exist in file [E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes\mapper\ExamDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: select exam_id, course_id, user_id, classroom_id, exam_type, exam_state, exam_time         from exam limit ? ,?<EOL><EOL>### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL>; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list']
+[WARN]2023-08-07 14:55:12,390 - Resolved [org.springframework.jdbc.BadSqlGrammarException: <EOL><EOL>### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL><EOL>### The error may exist in file [E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes\mapper\ExamDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: select exam_id, course_id, user_id, classroom_id, exam_type, exam_state, exam_time         from exam limit ? ,?<EOL><EOL>### Cause: java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list'<EOL>; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column 'classroom_id' in 'field list']
+[WARN]2023-08-07 14:59:59,491 - Resolved [org.springframework.dao.DataIntegrityViolationException: <EOL><EOL>### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'student_id' at row 1<EOL><EOL>### The error may exist in file [E:\实训\教学管理平台\C 构建阶段\2.项目组源代码\tpms\tpms\tpms\target\classes\mapper\ScoreDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: insert into score(student_id,course_id,score)         values (?,?,?)<EOL><EOL>### Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'student_id' at row 1<EOL>; Data truncation: Data too long for column 'student_id' at row 1; nested exception is com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'student_id' at row 1]
+[INFO]2023-08-07 17:14:03,996 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-08-07 17:14:04,000 - HikariPool-1 - Shutdown completed.

@@ -1,0 +1,74 @@
+[INFO]2023-08-03 09:01:34,451 - Starting TpmsApplication using Java 1.8.0_51 on DESKTOP-BL7IF7K with PID 10512 (C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms\target\classes started by 无敌暴龙战士 in C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms)
+[INFO]2023-08-03 09:01:34,453 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-08-03 09:01:34,522 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-08-03 09:01:34,522 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-08-03 09:01:36,601 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-08-03 09:01:36,611 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 09:01:36,613 - Starting service [Tomcat]
+[INFO]2023-08-03 09:01:36,613 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-08-03 09:01:36,704 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-08-03 09:01:36,705 - Root WebApplicationContext: initialization completed in 2182 ms
+[INFO]2023-08-03 09:01:37,226 - HikariPool-1 - Starting...
+[WARN]2023-08-03 09:01:37,227 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-08-03 09:01:37,367 - HikariPool-1 - Start completed.
+[INFO]2023-08-03 09:01:38,125 - LiveReload server is running on port 35729
+[INFO]2023-08-03 09:01:38,149 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 09:01:38,172 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-08-03 09:01:38,217 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-08-03 09:01:38,232 - Started TpmsApplication in 4.449 seconds (JVM running for 5.684)
+[INFO]2023-08-03 09:01:54,186 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-08-03 09:01:54,186 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-08-03 09:01:54,187 - Completed initialization in 1 ms
+[WARN]2023-08-03 10:40:28,697 - Resolved [org.springframework.dao.DataIntegrityViolationException: <EOL><EOL>### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`tpms2`.`score`, CONSTRAINT `FK_SCORE_SCORE1_STUDENT` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`))<EOL><EOL>### The error may exist in file [C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms\target\classes\mapper\ScoreDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: insert into score(student_id,course_id,score)         values (?,?,?)<EOL><EOL>### Cause: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`tpms2`.`score`, CONSTRAINT `FK_SCORE_SCORE1_STUDENT` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`))<EOL>; Cannot add or update a child row: a foreign key constraint fails (`tpms2`.`score`, CONSTRAINT `FK_SCORE_SCORE1_STUDENT` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)); nested exception is java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`tpms2`.`score`, CONSTRAINT `FK_SCORE_SCORE1_STUDENT` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`))]
+[WARN]2023-08-03 10:41:32,558 - Resolved [org.springframework.dao.DuplicateKeyException: <EOL><EOL>### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'MA010101' for key 'PRIMARY'<EOL><EOL>### The error may exist in file [C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms\target\classes\mapper\MajorDao.xml]<EOL><EOL>### The error may involve defaultParameterMap<EOL><EOL>### The error occurred while setting parameters<EOL><EOL>### SQL: insert into major(major_id,college_id, major_name)         values (?,?, ?)<EOL><EOL>### Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'MA010101' for key 'PRIMARY'<EOL>; Duplicate entry 'MA010101' for key 'PRIMARY'; nested exception is java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'MA010101' for key 'PRIMARY']
+[WARN]2023-08-03 13:51:21,599 - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h4m41s532ms59µs600ns).
+[INFO]2023-08-03 14:31:08,649 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-08-03 14:31:08,653 - HikariPool-1 - Shutdown completed.
+[INFO]2023-08-03 14:31:14,947 - Starting TpmsApplication using Java 1.8.0_51 on DESKTOP-BL7IF7K with PID 20240 (C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms\target\classes started by 无敌暴龙战士 in C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms)
+[INFO]2023-08-03 14:31:14,948 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-08-03 14:31:14,990 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-08-03 14:31:14,990 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-08-03 14:31:16,403 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-08-03 14:31:16,411 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 14:31:16,413 - Starting service [Tomcat]
+[INFO]2023-08-03 14:31:16,413 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-08-03 14:31:16,487 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-08-03 14:31:16,488 - Root WebApplicationContext: initialization completed in 1497 ms
+[INFO]2023-08-03 14:31:16,991 - HikariPool-1 - Starting...
+[WARN]2023-08-03 14:31:16,992 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-08-03 14:31:17,132 - HikariPool-1 - Start completed.
+[INFO]2023-08-03 14:31:18,054 - LiveReload server is running on port 35729
+[INFO]2023-08-03 14:31:18,080 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 14:31:18,108 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-08-03 14:31:18,142 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-08-03 14:31:18,151 - Started TpmsApplication in 3.571 seconds (JVM running for 6.556)
+[INFO]2023-08-03 14:31:23,111 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-08-03 14:31:23,111 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-08-03 14:31:23,112 - Completed initialization in 1 ms
+[WARN]2023-08-03 16:51:37,274 - Resolved [java.lang.NullPointerException]
+[INFO]2023-08-03 16:52:03,617 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-08-03 16:52:03,620 - HikariPool-1 - Shutdown completed.
+[INFO]2023-08-03 16:52:06,012 - Starting TpmsApplication using Java 1.8.0_51 on DESKTOP-BL7IF7K with PID 16784 (C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms\target\classes started by 无敌暴龙战士 in C:\Users\无敌暴龙战士\OneDrive\桌面\华迪实训\教学系统管理平台\各组员阶段性成果\8\tpms\tpms\tpms)
+[INFO]2023-08-03 16:52:06,014 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-08-03 16:52:06,055 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-08-03 16:52:06,055 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-08-03 16:52:07,244 - Tomcat initialized with port(s): 8080 (http)
+[INFO]2023-08-03 16:52:07,252 - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 16:52:07,254 - Starting service [Tomcat]
+[INFO]2023-08-03 16:52:07,254 - Starting Servlet engine: [Apache Tomcat/9.0.78]
+[INFO]2023-08-03 16:52:07,324 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-08-03 16:52:07,324 - Root WebApplicationContext: initialization completed in 1269 ms
+[INFO]2023-08-03 16:52:07,793 - HikariPool-1 - Starting...
+[WARN]2023-08-03 16:52:07,794 - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+[INFO]2023-08-03 16:52:07,922 - HikariPool-1 - Start completed.
+[INFO]2023-08-03 16:52:08,572 - LiveReload server is running on port 35729
+[INFO]2023-08-03 16:52:08,590 - Starting ProtocolHandler ["http-nio-8080"]
+[INFO]2023-08-03 16:52:08,606 - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO]2023-08-03 16:52:08,636 - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+[INFO]2023-08-03 16:52:08,648 - Started TpmsApplication in 3.036 seconds (JVM running for 3.892)
+[INFO]2023-08-03 16:52:24,381 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-08-03 16:52:24,381 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-08-03 16:52:24,382 - Completed initialization in 0 ms
+[WARN]2023-08-03 16:52:27,960 - Resolved [java.lang.NullPointerException]
+[INFO]2023-08-03 18:28:07,898 - HikariPool-1 - Shutdown initiated...
+[INFO]2023-08-03 18:28:07,906 - HikariPool-1 - Shutdown completed.

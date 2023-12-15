@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huadi.project.tpms.dao.MajorDao">
+
+    <resultMap id="BaseResultMap" type="com.huadi.project.tpms.entity.Major">
+        <!--@Table major-->
+        <result property="majorId" column="major_id" jdbcType="VARCHAR"/>
+        <result property="collegeId" column="college_id" jdbcType="VARCHAR"/>
+        <result property="majorName" column="major_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          major_id, college_id, major_name
+        from major
+        where major_id = #{majorId}
+    </select>
+<!--    查询按钮的实现-->
+    <select id="queryMajorByMajorId" resultMap="BaseResultMap">
+        select
+            major_id, college_id, major_name
+        from major
+        where major_id = #{majorId}
+    </select>
+    <select id="queryMajorByCollegeId" resultMap="BaseResultMap">
+        select
+            major_id, college_id, major_name
+        from major
+        where college_id = #{collegeId}
+    </select>
+    <select id="queryMajorByMajorName" resultMap="BaseResultMap">
+        select
+            major_id, college_id, major_name
+        from major
+        where major_name = #{majorName}
+    </select>
+
+
+
+
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from major
+        <where>
+            <if test="majorId != null and majorId != ''">
+                and major_id = #{majorId}
+            </if>
+            <if test="collegeId != null and collegeId != ''">
+                and college_id = #{collegeId}
+            </if>
+            <if test="majorName != null and majorName != ''">
+                and major_name = #{majorName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="majorId" useGeneratedKeys="true">
+        insert into major(major_id,college_id, major_name)
+        values (#{majorId},#{collegeId}, #{majorName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="majorId" useGeneratedKeys="true">
+        insert into major(college_id, major_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.collegeId}, #{entity.majorName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="majorId" useGeneratedKeys="true">
+        insert into major(college_id, major_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.collegeId}, #{entity.majorName})
+        </foreach>
+        on duplicate key update
+        college_id = values(college_id),
+        major_name = values(major_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update major
+        <set>
+            <if test="collegeId != null and collegeId != ''">
+                college_id = #{collegeId},
+            </if>
+            <if test="majorName != null and majorName != ''">
+                major_name = #{majorName},
+            </if>
+        </set>
+        where major_id = #{majorId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from major where major_id = #{majorId}
+    </delete>
+<!--查询数据库全部内容-->
+    <select id="majorSelectAll" resultMap="BaseResultMap">
+        select * from major limit #{pageStart} ,#{pageEnd}
+    </select>
+    <select id="majorSelectAllMaj" resultMap="BaseResultMap">
+        select * from major
+    </select>
+
+
+</mapper>
+
